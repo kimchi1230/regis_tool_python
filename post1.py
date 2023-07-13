@@ -5,12 +5,13 @@ from datetime import datetime
 import json
 import sys
 import os
+import keyboard
 
 def regis():
     while(True):
         env = input('Enter environment to create contract (local/dev/debug1/beer1/exit == Press Enter/clear console == cls): ')
         env = env.lower()
-        if env.strip() == "":
+        if env == "exit":
             sys.exit()
         if env == "cls":
             os.system('cls' if os.name == 'nt' else 'clear')       

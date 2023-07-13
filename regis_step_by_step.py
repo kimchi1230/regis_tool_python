@@ -1,11 +1,7 @@
-from os import system
 import time
 from datetime import datetime
 from selenium import webdriver
-from soupsieve import match
-from sqlalchemy import case
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
