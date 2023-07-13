@@ -9,12 +9,13 @@ import keyboard
 
 def regis():
     while(True):
-        env = input('Enter environment to create contract (local/dev/debug1/beer1/exit == Press Enter/clear console == cls): ')
+        env = input('Enter environment to create contract (local/dev/debug1/beer1/exit to exit/clear console == cls): ')
         env = env.lower()
         if env == "exit":
             sys.exit()
         if env == "cls":
-            os.system('cls' if os.name == 'nt' else 'clear')       
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return       
         switcher1 = {
             'local':'111',
             'dev':'321',
@@ -95,9 +96,10 @@ def regis():
     }
     x=requests.post(url_step1,data=data_step1,cookies=cookie_step1,headers=headers,verify=False)
     soup = BeautifulSoup(x.text,features="lxml")
-    for link in soup.find_all('input'):
-        tmp.append(link.get('value'))
-    
+    mail_token_input = soup.find_all('input', {'name': 'token'})
+    if mail_token_input:
+        mail_token_values = [input_tag['value'] for input_tag in mail_token_input]
+        tmp.append(mail_token_values[0])
     if not tmp:
         print("request error 1")
         regis()
