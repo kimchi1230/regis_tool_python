@@ -4,7 +4,7 @@ SRC ĐƯỢC VIẾT BẰNG PYTHON
  1. vào thư mục file build chạy file exe để sử dụng
 
 Các file .py bên ngoài là src code 
-+ post.py và post_ver1.py là src tự động gửi request thẳng lên server để tạo tài khoản
++ post.py và post1.py là src tự động gửi request thẳng lên server để tạo tài khoản
 Ưu điểm: nhanh + nhàn không phải suy nghĩ nhiều có thể sử dụng nhiều môi trường
 Nhược điểm: trong src hard code khá nhiều lâu lâu hệ thống đổi lớn quá lỗi ráng chịu, đổi sương sương thì không sao
 
