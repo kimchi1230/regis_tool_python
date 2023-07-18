@@ -17,7 +17,7 @@ tk_object = tk.Tk()
 combobox_var = tk.StringVar()
 # custom_font = Font(family="Comic Sans MS", size=15)
 tk_object.title("THE REGISTOR")
-tk_object.geometry("1000x500+100+100")
+tk_object.geometry("750x350+100+100")
 # tk_object.resizable(width=False, height=False)
 custom_font = Font(family="Comic Sans MS", size=15)
 
@@ -278,7 +278,7 @@ def apply_font(event):
     combobox.configure(font=custom_font)
 
 def update_text(content):
-    text_widget = tk.Text(window, height=1, font=custom_font)
+    text_widget = tk.Text(window, height=1, font=custom_font, width=20)
     text_widget.configure(state='normal')  # Make the Text widget editable
     text_widget.delete('1.0', 'end')  # Delete the current content
     text_widget.insert('1.0', content)  # Insert the new value
