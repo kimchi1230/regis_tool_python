@@ -1115,6 +1115,22 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\threading.py',
    'PYMODULE'),
+  ('tkinter',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\__init__.py',
+   'PYMODULE'),
+  ('tkinter.constants',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\constants.py',
+   'PYMODULE'),
+  ('tkinter.font',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\font.py',
+   'PYMODULE'),
+  ('tkinter.ttk',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\ttk.py',
+   'PYMODULE'),
   ('tracemalloc',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tracemalloc.py',
