@@ -10,23 +10,32 @@ import tkinter as tk
 from tkinter.font import Font
 from tkinter import ttk
 import threading
+import tkinter.messagebox as messagebox
 
-#frame input
-# tk_object = tk.Tk()
 tk_object = tk.Tk()
 combobox_var = tk.StringVar()
-# custom_font = Font(family="Comic Sans MS", size=15)
 tk_object.title("THE REGISTOR")
-tk_object.geometry("750x350+100+100")
-# tk_object.resizable(width=False, height=False)
+# tk_object.geometry("750x350+100+100")
+tk_object.resizable(0,0)
 custom_font = Font(family="Comic Sans MS", size=15)
 
-#frame result
-# result_frame = tk.Frame(tk_object)
-# result_frame.grid(row=1, column=0)
-window = tk.Frame(tk_object)
-window.grid(row=0, column=0)
+window1 = tk.Frame(tk_object)
+window1.grid(row=0, column=0, sticky='nsew')
 
+canvas = tk.Canvas(window1, width=750, height=350)
+canvas.grid(row=0, column=0, sticky='nsew')
+
+my_scrollbar = tk.Scrollbar(window1, orient='vertical', command=canvas.yview)
+my_scrollbar.grid(row=0, column=1, sticky='nsew')
+
+canvas.configure(yscrollcommand=my_scrollbar.set)
+canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+
+window2 = tk.Frame(canvas)
+window2.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+canvas.create_window((0,0), window=window2, anchor='nw')
+window1.columnconfigure(0, weight=1)
+window1.rowconfigure(0, weight=1)
 def regis():
     try:
         while(True):
@@ -82,10 +91,10 @@ def regis():
             print(sql)
             exit()
 
-        if env == 'local':
-            tshop = 'tshop00060960'
-        else:
-            tshop = 'tshop00034654'
+        # if env == 'local':
+        #     tshop = 'tshop00060960'
+        # else:
+        #     tshop = 'tshop00034654'
 
         tmp = tmp1 = ser_server_tmp =[]
         email = 'toolprovjpno1vodichvutru'+ datetime.now().strftime('%y%m%d%H%M%S')+ '@lampart-vn.com'
@@ -193,6 +202,12 @@ def regis():
             con_agree = agree_values[0]
         # print(con_agree)
 
+        shop = soup_agree.find_all('input', {'name': 'gmo_authorization_shop_id'})
+        if shop:
+            shop_values = [input_tag['value'] for input_tag in shop]
+            tshop = shop_values[0]
+
+        # url_step2 = f"https://pt01.mul-pay.jp/ext/api/getToken?key=nVmYmre0TWuwsXF9IX3VFuCRMf%2F%2FSPXLipsFpT1NnTfzRYP7M7bqAk4LV0HvqzH%2BqrtBRlCZbQXprTO9gUuQXHETLB9ZASlDTMAnVtgiorhUdnM75dk69Jg9al4LvwdXAEgVQQa%2Ffnc2t0EjNaskHvOuLQM8frtoeu77AbhOkuHnGaFnLtjbimUfIgIv1e%2BtQXn6uxYu2RHAhniTlXqDnBxPDrNE2xXneNQZdBwmlHPhW%2FIvUwoyfe9ijBSC6XO%2Be6Ca6j10eORigBvmIVr4LXYWATX%2FV6Bi6Jxqf2saiYsSVhQNDN0V1CH6S%2FgYo2gmRzMR7iL290djASkm9dXGNw%3D%3D&callback=gmo_token_add&publicKey={tshop}&encrypted=NM9vLhqVOoV4gcsHCpuWfBJNjRnM2QL9GLiKwH%2FBhm8FUME%2FdNPuiqrWKVNijDA7&seal=05f2e38bc68df7c68619e0b31b6c8f1e4dfc8f7a&version=5"
 
         y = requests.get(url_step2,verify=False)
         progress_bar["value"] = 80
@@ -268,23 +283,21 @@ def regis():
             # set label_password text   
             update_text(password_p)
     except:
-        update_text("ALO lỗi rồi đại vương ơi báo gấp cho Chí ae ơi")
+        update_text("ALO lỗi rồi đại vương ơi !")
     button.config(state="normal")
 
 # while True:
 #     regis()      
 
-def apply_font(event):
-    combobox.configure(font=custom_font)
-
 def update_text(content):
-    text_widget = tk.Text(window, height=1, font=custom_font, width=20)
+    text_widget = tk.Text(window2, height=1, font=custom_font, width=20)
     text_widget.configure(state='normal')  # Make the Text widget editable
     text_widget.delete('1.0', 'end')  # Delete the current content
     text_widget.insert('1.0', content)  # Insert the new value
     text_widget.configure(state='disabled')  # Make the Text widget uneditable again
-    row = window.grid_size()[1] + 1
+    row = window2.grid_size()[1] + 1
     text_widget.grid(row=row, column=0, columnspan=3, sticky="ew", padx=10)
+    text_widget.bind("<Button-1>", lambda event: copy_to_clipboard(text_widget))
 
 def on_button_click():
     if not is_running[0]:
@@ -295,27 +308,34 @@ def on_button_click():
         is_running[0] = False
         progress_bar.stop()
 
+def copy_to_clipboard(text_widget):
+    text = text_widget.get("1.0", "end-1c")
+    window2.clipboard_clear()
+    window2.clipboard_append(text)
+    
 
 #label
-label = tk.Label(window, text="Environment (local/dev/debug1/beer1)",font=custom_font)
+label = tk.Label(window2, text="Environment (local/dev/debug1/beer1)",font=custom_font)
+label_ps = tk.Label(window2, text="P/s: click chuột vào mk tk sẽ tự động copy !",font=custom_font)
 #dropdown
 values = ['local', 'dev', 'debug1','beer1']
-combobox = ttk.Combobox(window, values=values, width=12, state="readonly", textvariable=combobox_var)
+combobox = ttk.Combobox(window2, values=values, width=12, state="readonly", textvariable=combobox_var)
 # combobox.configure(font=custom_font)
 
 #button
-button = tk.Button(window, text="Submit", width=6, height=1, font=custom_font)
+button = tk.Button(window2, text="Submit", width=6, height=1, font=custom_font)
 button.config(command=on_button_click)
 
-progress_bar = ttk.Progressbar(window, orient="horizontal", mode="determinate", length=700)
+progress_bar = ttk.Progressbar(window2, orient="horizontal", mode="determinate", length=700)
 
 #grid
 label.grid(row=0, column=0, padx=10, pady=10)
 combobox.grid(row=0, column=1, padx=10, pady=10)
 button.grid(row=0, column=2, padx=10, pady=10)
-progress_bar.grid(row=1, column=0, padx=10, columnspan=3,sticky="ew")
-combobox.bind("<<ComboboxSelected>>", apply_font)
+progress_bar.grid(row=2, column=0, padx=10, columnspan=3,sticky="ew")
+label_ps.grid(row=1, column=0, columnspan=3,sticky="ew")
+combobox.bind("<<ComboboxSelected>>", lambda e: combobox.configure(font=custom_font))
 combobox.set('local')
 
 is_running = [False]
-window.mainloop()
+tk_object.mainloop()

@@ -1119,6 +1119,10 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\__init__.py',
    'PYMODULE'),
+  ('tkinter.commondialog',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\commondialog.py',
+   'PYMODULE'),
   ('tkinter.constants',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\constants.py',
@@ -1126,6 +1130,10 @@
   ('tkinter.font',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\font.py',
+   'PYMODULE'),
+  ('tkinter.messagebox',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tkinter\\messagebox.py',
    'PYMODULE'),
   ('tkinter.ttk',
    'C:\\Users\\Kim '
