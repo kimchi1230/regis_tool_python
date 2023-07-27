@@ -1163,6 +1163,9 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\ftplib.py',
    'PYMODULE'),
+  ('get_input',
+   'E:\\PhanDai\\Software\\xampp2\\htdocs\\ajax_example\\tool_regis\\request_tool\\get_input.py',
+   'PYMODULE'),
   ('getopt',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\getopt.py',
@@ -1382,38 +1385,6 @@
   ('json.scanner',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\json\\scanner.py',
-   'PYMODULE'),
-  ('keyboard',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\__init__.py',
-   'PYMODULE'),
-  ('keyboard._canonical_names',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_canonical_names.py',
-   'PYMODULE'),
-  ('keyboard._darwinkeyboard',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_darwinkeyboard.py',
-   'PYMODULE'),
-  ('keyboard._generic',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_generic.py',
-   'PYMODULE'),
-  ('keyboard._keyboard_event',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_keyboard_event.py',
-   'PYMODULE'),
-  ('keyboard._nixcommon',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_nixcommon.py',
-   'PYMODULE'),
-  ('keyboard._nixkeyboard',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_nixkeyboard.py',
-   'PYMODULE'),
-  ('keyboard._winkeyboard',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\keyboard\\_winkeyboard.py',
    'PYMODULE'),
   ('kiwisolver',
    'C:\\Users\\Kim '

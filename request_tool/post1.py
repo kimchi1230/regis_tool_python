@@ -2,10 +2,7 @@ from http.cookiejar import Cookie
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import json
-import sys
 import os
-import keyboard
 import tkinter as tk
 from tkinter.font import Font
 from tkinter import ttk
@@ -14,6 +11,8 @@ import tkinter.messagebox as messagebox
 from requests_html import HTMLSession 
 import special_request
 import time
+import get_input
+import sys
 
 session = HTMLSession(verify=False)
 session.browser
@@ -42,6 +41,13 @@ window2.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox(
 canvas.create_window((0,0), window=window2, anchor='nw')
 window1.columnconfigure(0, weight=1)
 window1.rowconfigure(0, weight=1)
+
+result_get_file = get_input.generate_default_config_file(is_check_exist_default=True)
+if not result_get_file:
+    messagebox.showinfo("Error", "Can not create config file")
+    sys.exit()
+
+
 def regis():
     try:
         while(True):
@@ -97,14 +103,47 @@ def regis():
             print(sql)
             exit()
 
-        # if env == 'local':
-        #     tshop = 'tshop00060960'
-        # else:
-        #     tshop = 'tshop00034654'
 
+#---------------------------------------------------------------------------------------
+#---------------------------------INPUT DATA--------------------------------------------
+        input = get_input.get_config()
+        first_name = input['first_name'] #first_name': 'tool',
+        last_name = input['last_name'] #last_name': 'provjp',
+        first_name_kana = input['first_name_kana'] #first_name_kana': 'フリガナ',
+        last_name_kana = input['last_name_kana'] #last_name_kana': 'フリガナ',
+        email = input['email']+ datetime.now().strftime('%y%m%d%H%M%S')+ '@lampart-vn.com' #email': 'toolprovjpno1vodichvutru',
+        password_p = input['password'] #pass' : 'lampart123',
+        zipcode = input['zipcode'] #zipcode': '1500000',
+        server_rental = input['server_rental'] #server_rental': '2',
+        water = input['water'] #water': '211',
+        holder_color = input['holder_color'] #holder_color': '3',
+        customer_type = input['customer_type'] #customer_type': '1',
+        settlement_type = input['settlement_type'] #settlement_type': 'credit_card_gmo',
+        plan_type = input['plan_type'] #plan_type": "1",
+        payment_card_no_1 = input['payment_card_no_1'] #payment_card_no_1": "3540",
+        payment_card_no_2 = input['payment_card_no_2'] #payment_card_no_2": "1111",
+        payment_card_no_3 = input['payment_card_no_3'] #payment_card_no_3": "1111",
+        payment_card_no_4 = input['payment_card_no_4'] #payment_card_no_4": "1111",
+        payment_expiry_year = input['payment_expiry_year'] #payment_expiry_year": "2026",
+        payment_expiry_month = input['payment_expiry_month'] #payment_expiry_month": "01",
+        payment_card_name = input['payment_card_name'] #payment_card_name": "chi",
+        payment_card_cvc = input['payment_card_cvc'] #payment_card_cvc": "2410",
+        prefecture = input['prefecture'] #prefecture': '13',
+        prefecture_id_text = input['prefecture_id_text'] #prefecture_id_text': '東京都',
+        address_1 = input['address_1'] #address_1': '渋谷区以下に掲載がない場合454',
+        address_2 = input['address_2'] #address_2': '',
+        sex_cd = input['sex_cd'] #sex_cd': '2',
+        birth_date_year = input['birth_date_year']  #birth_date_year = 1993
+        birth_date_month = input['birth_date_month'] #birth_date_month = 10
+        birth_date_day = input['birth_date_day'] #birth_date_day = 24
+        phone_no = input['phone_no'] #phone_no': '0994984984',
+        # payment_card = payment_card_no_1 + payment_card_no_2 + payment_card_no_3 + payment_card_no_4
+        is_disable_brower = input['is_disable_brower'] #is_disable_brower': '0',
+
+
+#---------------------------------------------------------------------------------------
+#---------------------------------SYSTEM DATA-------------------------------------------
         tmp =[]
-        email = 'toolprovjpno1vodichvutru'+ datetime.now().strftime('%y%m%d%H%M%S')+ '@lampart-vn.com'
-        password_p = 'lampart123'
         csrf_key = 'chideptrai'
         headers ={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36'}
         # url_final = url_root+'/register/success/code/registration'
@@ -120,10 +159,10 @@ def regis():
 
 
         data_step1 = {
-            'c_zipcode':'1500000',
+            'c_zipcode':zipcode,
             'uniqid':'dadadada47',
             'form_action':'entrymailaddress',
-            'txt_confirm_zipcode':'1500000',
+            'txt_confirm_zipcode':zipcode,
             'txt_check_address':'',
             'email': email,
             'confirm_email': email,
@@ -185,29 +224,29 @@ def regis():
         data_agree = {
             'token_mail_confirm': tmp[0], 
             'ser_server': ser_server,
-            'ser_server_rental':'2',
-            'ser_plan_type':'1',
-            'ser_water':'211',
-            'ser_holder_color':'3',
-            'ser_customer_type':'1',
-            'ser_category_settlement_type':'credit_card_gmo',
+            'ser_server_rental':server_rental,
+            'ser_plan_type':plan_type,
+            'ser_water':water,
+            'ser_holder_color':holder_color,
+            'ser_customer_type':customer_type,
+            'ser_category_settlement_type':settlement_type,
             'ser_enterprise_campaign':ser_enterprise_campaign, #dev 111 | local 67 | debug 143
             'ser_server_id': ser_server,
-            'ser_product_id':'211',
-            'campaign_page_code': 'registration',
-            'aquisition_partner_id_check': '2750',
+            'ser_product_id':water,
+            'campaign_page_code': ser_campaign_page_code,
+            'aquisition_partner_id_check': ser_partner_id,
             'files':'',
             'form_action':'server',
-            'water':'211',
-            'plan_type':'1',
-            'holder_color':'3',
+            'water':water,
+            'plan_type':plan_type,
+            'holder_color':holder_color,
             'enterprise_campaign':ser_enterprise_campaign,
             'server':ser_server,
-            'server_rental':'2',
+            'server_rental':server_rental,
             'server_plan_free':'',
             'server_plan':'',
-            'customer_type':'1',
-            'category_settlement_type':'credit_card_gmo',
+            'customer_type':customer_type,
+            'category_settlement_type':settlement_type,
         }
         # send request to get variable agree
         request_agree = requests.post(url_agree,data=data_agree,verify=False)
@@ -231,16 +270,16 @@ def regis():
         data_sub_final = {
             "token_mail_confirm": tmp[0],
             "ser_server": ser_server,
-            "ser_server_rental": "2",
-            "ser_plan_type": "1",
-            "ser_water": "211",
-            "ser_holder_color": "3",
-            "ser_customer_type": "1",
-            "ser_category_settlement_type": "credit_card_gmo",
+            "ser_server_rental": server_rental,
+            "ser_plan_type": plan_type,
+            "ser_water": water,
+            "ser_holder_color": holder_color,
+            "ser_customer_type": customer_type,
+            "ser_category_settlement_type": settlement_type,
             "ser_enterprise_campaign": ser_enterprise_campaign,
             "ser_option_service": ser_option_service,
             "ser_server_id": ser_server,
-            "ser_product_id": "211",
+            "ser_product_id": water,
             # "con_campaign_code": "",
             # "con_agree": "2678",
             # "con_c_first_name": "test",
@@ -274,24 +313,24 @@ def regis():
             # "con_payment_card_no": "3540111111111111",
             # "con_c_old_agreements": "",
             "hidden_partner_id": ser_partner_id,
-            "campaign_page_settlement": "sett_type_gmo",
+            "campaign_page_settlement": 'sett_type_gmo',
             "campaign_page_code": "registration",
             "c_old_agreements": "",
             "form_action": "contract",
-            "c_last_name": "chi",
-            "c_first_name": "test",
-            "c_last_name_kana": "フリガナ",
-            "c_first_name_kana": "フリガナ",
-            "c_sex_cd": "3",
-            "c_birth_date_year": "1993",
-            "c_birth_date_month": "1",
-            "c_birth_date_day": "1",
-            "c_zipcode": "1500000",
-            "c_prefecture_id_text": "東京都",
-            "c_prefecture": "13",
-            "c_address_1": "渋谷区6",
-            "c_address_2": "",
-            "c_phone_no": "0994984984",
+            "c_last_name": last_name,
+            "c_first_name": first_name,
+            "c_last_name_kana": last_name_kana,
+            "c_first_name_kana": first_name_kana,
+            "c_sex_cd": sex_cd,
+            "c_birth_date_year": birth_date_year,
+            "c_birth_date_month": birth_date_month,
+            "c_birth_date_day": birth_date_day,
+            "c_zipcode": zipcode,
+            "c_prefecture_id_text": prefecture_id_text,
+            "c_prefecture": prefecture,
+            "c_address_1": address_1,
+            "c_address_2": address_2,
+            "c_phone_no": phone_no,
             "login_id": email,
             "optin_type_premium": "1",
             "mypage_password": password_p,
@@ -308,19 +347,23 @@ def regis():
             "d_address_2": "",
             "d_phone_no": "",
             "gmo_authorization_shop_id": tshop,
-            "payment_card_no_1": "3540",
-            "payment_card_no_2": "1111",
-            "payment_card_no_3": "1111",
-            "payment_card_no_4": "1111",
-            "payment_expiry_year": "2024",
-            "payment_expiry_month": "01",
-            "payment_card_name": "dsadad",
-            "payment_card_cvc": "2410",
+            "payment_card_no_1": payment_card_no_1,
+            "payment_card_no_2": payment_card_no_2,
+            "payment_card_no_3": payment_card_no_3,
+            "payment_card_no_4": payment_card_no_4,
+            "payment_expiry_year": payment_expiry_year,
+            "payment_expiry_month": payment_expiry_month,
+            "payment_card_name": payment_card_name,
+            "payment_card_cvc": payment_card_cvc,
             "agree": con_agree,
-            "campaign_code": ""
+            "campaign_code": "",
+            "is_disable_brower": is_disable_brower
         }
         html_rs = special_request.perform_post_request_with_button_click(url_sub_final, data_sub_final)
 
+        if not html_rs:
+            raise Exception("FAIL IN FINAL REQUEST")
+        
         # data_final = {
         #     'token_mail_confirm': tmp[0], 
         #     'ser_server': ser_server,
@@ -376,27 +419,27 @@ def regis():
         # z = session.post(url_final,data=data_final,headers=headers ,verify=False)
         
 
-        progress_bar["value"] = 100
-        progress_bar.update()
 
         print(str(html_rs))
-        text_success = html_rs.find_all('div', {'class': 'thank_you_text' })
-        if(text_success):
+        text_success = html_rs.find('input', {'name': 'success_data[contract_id]'})
+        text_success2 = html_rs.find('div', {'class': 'thank_you_text'})
+        if(text_success or text_success2):
             print(email)
             print(password_p)
             # set label_password text
             update_text(email)
             # set label_password text   
             update_text(password_p)
+            progress_bar["value"] = 100
+            progress_bar.update()
         else:
-            raise Exception("FAIL IN FINAL STEP")
+            raise Exception("FAIL IN FINAL REQUEST PROCESSING FAIL")
     except Exception as e:
         # update_text("ALO lỗi rồi đại vương ơi !")
         print(e)
     button.config(state="normal")
 
-# while True:
-#     regis()      
+
 
 def update_text(content):
     text_widget = tk.Text(window2, height=1, font=custom_font, width=20)
