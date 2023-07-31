@@ -17,6 +17,7 @@ import asyncio
 
 def regis():
     try:
+        start = time.time()
         env = combobox_var.get().lower()
         switcher = {
             'local':'https://dev.beer.com.vn',
@@ -63,12 +64,15 @@ def regis():
         # payment_card = payment_card_no_1 + payment_card_no_2 + payment_card_no_3 + payment_card_no_4
         is_disable_brower = input['is_disable_brower'] #is_disable_brower': '0', 
         # server = input['server']   
+#---------------------------------------------------------------------------------------
+#---------------------------------INPUT DATA--------------------------------------------
     
 
 
 #---------------------------------------------------------------------------------------
 #---------------------------------SYSTEM DATA-------------------------------------------
         tmp =[]
+        session = requests.Session()
         csrf_key = 'chideptrai'
         headers ={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36'}
         # url_final = url_root+'/register/success/code/registration'
@@ -77,7 +81,12 @@ def regis():
         url_step3 = url_root+'/register/server/code/registration'
         url_agree = url_root+'/register/contract/code/registration'
         url_sub_final = url_root+'/register/confirm/code/registration'
+#---------------------------------------------------------------------------------------
+#---------------------------------SYSTEM DATA-------------------------------------------
 
+
+#-----------------------------------------------------------------------------------------
+#---------------------------------SEND REQUEST 1------------------------------------------
         cookie_step1 = {
             'csrf_cookie_name':csrf_key
         }
@@ -95,7 +104,7 @@ def regis():
             'agreement':'1',
             'csrf_test_name':csrf_key
         }
-        x=requests.post(url_step1,data=data_step1,cookies=cookie_step1,headers=headers,verify=False)
+        x=session.post(url_step1,data=data_step1,cookies=cookie_step1,headers=headers,verify=False)
         progress_bar["value"] = 20
         progress_bar.update()
 
@@ -104,47 +113,60 @@ def regis():
         if mail_token_input:
             mail_token_values = [input_tag['value'] for input_tag in mail_token_input]
             tmp.append(mail_token_values[0])
-      
+#-----------------------------------------------------------------------------------------
+#---------------------------------SEND REQUEST 1------------------------------------------     
+
+#-----------------------------------------------------------------------------------------
+#---------------------------------SEND REQUEST 2------------------------------------------  
         data_step3 = {
             'token': tmp[0]
         }
 
         # get variable server
-        n = requests.post(url_step3,data=data_step3,verify=False)
+        n = session.post(url_step3,data=data_step3,verify=False)
         progress_bar["value"] = 40
         progress_bar.update()
 
         soup_server = BeautifulSoup(n.text,features="lxml")
         server_inputs = soup_server.find_all('input', {'name': 'server'})
-        # for link in soup_server.find_all('input'):
-        #     print(link)
-
+        if not server_inputs: raise Exception('server_inputs input not found')
         if server_inputs:
             server_values = [input_tag['value'] for input_tag in server_inputs]
-            ser_server = server_values[0]
+            ser_server = check_exits_value(server_values,0,'ser_server')
         # print(ser_server)
 
         # get variable campaign
         enterprise_inputs = soup_server.find_all('input', {'name': 'enterprise_campaign'})
+        if not enterprise_inputs: raise Exception('enterprise_inputs input not found')
         if enterprise_inputs:
             enterprise_values = [input_tag['value'] for input_tag in enterprise_inputs]
-            ser_enterprise_campaign = enterprise_values[0]
+            ser_enterprise_campaign = check_exits_value(enterprise_values,0,'ser_enterprise_campaign')
         # print(ser_enterprise_campaign)
 
         option_service_input = soup_server.find_all('input', {'name': 'option_service'})
+        if not option_service_input: raise Exception('option_service_input input not found')
         if option_service_input:
             option_service_values = [input_tag['value'] for input_tag in option_service_input]
-            ser_option_service = option_service_values[0]
+            ser_option_service = check_exits_value(option_service_values,0,'ser_option_service')
 
         partner_id_input = soup_server.find_all('input', {'name': 'aquisition_partner_id_check'})
+        if not partner_id_input: raise Exception('partner_id_input input not found')
         if partner_id_input:
             partner_id_values = [input_tag['value'] for input_tag in partner_id_input]
-            ser_partner_id = partner_id_values[0]
+            ser_partner_id = check_exits_value(partner_id_values,0,'ser_partner_id')
 
         campaign_page_code = soup_server.find_all('input', {'name': 'campaign_page_code'})
+        if not campaign_page_code: raise Exception('campaign_page_code input not found')
         if campaign_page_code:
             campaign_page_code_values = [input_tag['value'] for input_tag in campaign_page_code]
-            ser_campaign_page_code = campaign_page_code_values[0]
+            ser_campaign_page_code = check_exits_value(campaign_page_code_values,0,'campaign_page_code')
+
+#-----------------------------------------------------------------------------------------
+#---------------------------------SEND REQUEST 2------------------------------------------  
+
+
+#-----------------------------------------------------------------------------------------
+#---------------------------------SEND REQUEST 3------------------------------------------  
             
         data_agree = {
             'token_mail_confirm': tmp[0], 
@@ -174,23 +196,26 @@ def regis():
             'category_settlement_type':settlement_type,
         }
         # send request to get variable agree
-        request_agree = requests.post(url_agree,data=data_agree,verify=False)
+        request_agree = session.post(url_agree,data=data_agree,verify=False)
         progress_bar["value"] = 60
         progress_bar.update()
 
         soup_agree = BeautifulSoup(request_agree.text,features="lxml")
         agree_inputs = soup_agree.find_all('input', {'name': 'agree'})
-        # print(request_agree.text)
-        # print(agree_inputs)
+        if not agree_inputs: raise Exception('agree input not found')
         if agree_inputs:
             agree_values = [input_tag['value'] for input_tag in agree_inputs]
-            con_agree = agree_values[0]
+            con_agree = check_exits_value(agree_values,0,'con_agree')
         # print(con_agree)
 
         shop = soup_agree.find_all('input', {'name': 'gmo_authorization_shop_id'})
+        if not shop: raise Exception('agree input not found')
         if shop:
             shop_values = [input_tag['value'] for input_tag in shop]
-            tshop = shop_values[0]
+            tshop = check_exits_value(shop_values,0,'tshop')
+#-----------------------------------------------------------------------------------------
+#---------------------------------SEND REQUEST 3------------------------------------------  
+
 
         data_sub_final = {
             "token_mail_confirm": tmp[0],
@@ -258,7 +283,8 @@ def regis():
         #pyppeteer
         html_rs = asynco.run_until_complete(special_request.perform_post_request_with_button_click1(url_sub_final, data_sub_final))
         if not html_rs:
-            raise Exception("FAIL IN FINAL REQUEST")
+            raise Exception("FINAL REQUEST FAIL")
+        
         print(str(html_rs))
         text_success = html_rs.find('input', {'name': 'success_data[contract_id]'})
         text_success2 = html_rs.find('div', {'class': 'thank_you_text'})
@@ -267,28 +293,50 @@ def regis():
             print(email)
             print(password_p)
             # set label_password text
-            update_text(email)
+            end = time.time()
+            update_text(email,env,excution_time=end-start)
             # set label_password text   
-            update_text(password_p)
+            update_text(password_p,time=True)
             progress_bar["value"] = 100
             progress_bar.update()
         else:
-            raise Exception("FAIL IN FINAL REQUEST PROCESSING FAIL")
+            raise Exception("FINAL REQUEST PROCESS FAIL")
     except Exception as e:
         # update_text("ALO lỗi rồi đại vương ơi !")
         print(e)
-        update_text(e)
+        end = time.time()
+        update_text(e,env,excution_time=end-start)
     button.config(state="normal")
+    session.close()
+    print(end - start)
 
-def update_text(content):
+def update_text(content,env='',time = False,excution_time = 0):
     text_widget = tk.Text(window2, height=1, font=custom_font, width=20)
     text_widget.configure(state='normal')  # Make the Text widget editable
-    text_widget.delete('1.0', 'end')  # Delete the current content
     text_widget.insert('1.0', content)  # Insert the new value
     text_widget.configure(state='disabled')  # Make the Text widget uneditable again
+    # text_widget.configure(width=len(time))
     row = window2.grid_size()[1] + 1
-    text_widget.grid(row=row, column=0, columnspan=3, sticky="ew", padx=10)
+    text_widget.grid(row=row, column=0, columnspan=3, sticky="ew",padx=(10,0))
     text_widget.bind("<Button-1>", lambda event: copy_to_clipboard(text_widget))
+    
+    if env:
+        string_var = env+'|Excution: '+str(round(excution_time, 2))+'s'
+        text_widget_env = tk.Entry(window2, font=custom_font)
+        text_widget_env.configure(state='normal')  # Make the Text widget editable
+        text_widget_env.insert(0,string_var)  # Insert the new value
+        text_widget_env.configure(state='disabled')  # Make the Text widget uneditable again
+        text_widget_env.config(width=len(string_var))
+        text_widget_env.grid(row=row, column=4, columnspan=4, sticky="ew")
+
+    if time:
+        time = datetime.now().strftime("%H:%M %Y/%m/%d")
+        text_widget_time = tk.Entry(window2, font=custom_font)
+        text_widget_time.configure(state='normal')  # Make the Text widget editable
+        text_widget_time.insert(0,time)  # Insert the new value
+        text_widget_time.configure(state='disabled')  # Make the Text widget uneditable again
+        text_widget_time.config(width=len(time))
+        text_widget_time.grid(row=row, column=4, columnspan=4, sticky="ew")
 
 def on_button_click():
     if not is_running[0]:
@@ -304,7 +352,11 @@ def copy_to_clipboard(text_widget):
     text = text_widget.get("1.0", "end-1c")
     window2.clipboard_clear()
     window2.clipboard_append(text)
-    
+
+def check_exits_value(data,key,str):
+    if data[key] is None:
+        raise Exception("NOT FOUND KEY "+str)
+    return data[key]
 
 if __name__ == "__main__":
     asynco = asyncio.new_event_loop()
@@ -318,7 +370,7 @@ if __name__ == "__main__":
     window1 = tk.Frame(tk_object)
     window1.grid(row=0, column=0, sticky='nsew')
 
-    canvas = tk.Canvas(window1, width=750, height=350)
+    canvas = tk.Canvas(window1, width=1250, height=350)
     canvas.grid(row=0, column=0, sticky='nsew')
 
     my_scrollbar = tk.Scrollbar(window1, orient='vertical', command=canvas.yview)
@@ -339,7 +391,7 @@ if __name__ == "__main__":
         sys.exit()
     #label
     label = tk.Label(window2, text="Environment (local/dev/debug1/beer1)",font=custom_font)
-    label_ps = tk.Label(window2, text="P/s: click chuột vào mk tk sẽ tự động copy !",font=custom_font)
+    label_ps = tk.Label(window2, text="P/s: single click on field to copy !",font=custom_font)
     #dropdown
     values = ['local', 'dev', 'debug1','beer1']
     combobox = ttk.Combobox(window2, values=values, width=12, state="readonly", textvariable=combobox_var)
@@ -349,7 +401,7 @@ if __name__ == "__main__":
     button = tk.Button(window2, text="Submit", width=6, height=1, font=custom_font)
     button.config(command=on_button_click)
 
-    progress_bar = ttk.Progressbar(window2, orient="horizontal", mode="determinate", length=700)
+    progress_bar = ttk.Progressbar(window2, orient="horizontal", mode="determinate", length=900)
 
     #grid
     label.grid(row=0, column=0, padx=10, pady=10)
@@ -359,6 +411,5 @@ if __name__ == "__main__":
     label_ps.grid(row=1, column=0, columnspan=3,sticky="ew")
     combobox.bind("<<ComboboxSelected>>", lambda e: combobox.configure(font=custom_font))
     combobox.set('local')
-
     is_running = [False]
     tk_object.mainloop()

@@ -80,38 +80,43 @@ def perform_post_request_with_button_click(url, post_data):
 
 
 async def perform_post_request_with_button_click1(url,content):
-    headless = False
-    if content.get('is_disable_brower') == '1':
-        headless = True
-    brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True)
-    page = await brower.newPage()
-    await page.goto("https://www.google.com")
-    post_data_str = ', '.join([f'''"{key}": "{value}"''' for key, value in content.items()])
-    post_data_str = '{' + post_data_str + '}'
-    script = f"""
-            var form = document.createElement("form");
-            form.method = "post";
-            form.action = "{url}";
-            var postData = {post_data_str};
-            for (var key in postData) {{
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = key;
-                input.value = postData[key];
-                form.appendChild(input);
-            }}
+    try:
+        headless = False
+        if content.get('is_disable_brower') == '1':
+            headless = True
+        brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True)
+        page = await brower.newPage()
+        await page.goto("https://www.google.com")
+        post_data_str = ', '.join([f'''"{key}": "{value}"''' for key, value in content.items()])
+        post_data_str = '{' + post_data_str + '}'
+        script = f"""
+                var form = document.createElement("form");
+                form.method = "post";
+                form.action = "{url}";
+                var postData = {post_data_str};
+                for (var key in postData) {{
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = key;
+                    input.value = postData[key];
+                    form.appendChild(input);
+                }}
 
-            document.body.appendChild(form);
-            form.submit();
-        """
-    await page.evaluate(script)
-    await page.waitForSelector('.btn_get_gmo_token')
-    time.sleep(1)
-    await page.click('.btn_get_gmo_token')
-    await page.waitForSelector('.redirect-url')
-    html = await page.content()
-    await brower.close()
-    return format_html(html)
+                document.body.appendChild(form);
+                form.submit();
+            """
+        await page.evaluate(script)
+        await page.waitForSelector('.btn_get_gmo_token')
+        time.sleep(1)
+        await page.click('.btn_get_gmo_token')
+        await page.waitForSelector('.redirect-url')
+        html = await page.content()
+        await brower.close()
+        return format_html(html)
+    except Exception as e:
+        await brower.close()
+        return False
+
 
 
 # def perform_post_request_with_button_click1(sesion_obj,url,content):
