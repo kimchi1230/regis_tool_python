@@ -13,97 +13,20 @@ import special_request
 import time
 import get_input
 import sys
-
-session = HTMLSession(verify=False)
-session.browser
-
-tk_object = tk.Tk()
-combobox_var = tk.StringVar()
-tk_object.title("THE REGISTOR")
-# tk_object.geometry("750x350+100+100")
-tk_object.resizable(0,0)
-custom_font = Font(family="Comic Sans MS", size=15)
-
-window1 = tk.Frame(tk_object)
-window1.grid(row=0, column=0, sticky='nsew')
-
-canvas = tk.Canvas(window1, width=750, height=350)
-canvas.grid(row=0, column=0, sticky='nsew')
-
-my_scrollbar = tk.Scrollbar(window1, orient='vertical', command=canvas.yview)
-my_scrollbar.grid(row=0, column=1, sticky='nsew')
-
-canvas.configure(yscrollcommand=my_scrollbar.set)
-canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
-
-window2 = tk.Frame(canvas)
-window2.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
-canvas.create_window((0,0), window=window2, anchor='nw')
-window1.columnconfigure(0, weight=1)
-window1.rowconfigure(0, weight=1)
-
-result_get_file = get_input.generate_default_config_file(is_check_exist_default=True)
-if not result_get_file:
-    messagebox.showinfo("Error", "Can not create config file")
-    sys.exit()
-
+import asyncio
 
 def regis():
     try:
-        while(True):
-            env = combobox_var.get()
-            env = env.lower()
-            if env == "":
-                return
-            if env == "cls":
-                os.system('cls' if os.name == 'nt' else 'clear')
-                return       
-            # switcher1 = {
-            #     'local':'111',
-            #     'dev':'321',
-            #     'debug1':'143',
-            #     'beer1':'67',
-            # }
-            # switcher2 = {
-            #     'local':'2678',
-            #     'dev':'2804',
-            #     'debug1':'1971',
-            #     'beer1':'2590'
-            # }
-            switcher = {
-                'local':'https://dev.beer.com.vn',
-                'dev':'https://dev1.drbe.jp',
-                'debug1':'https://debug1.drbe.jp',
-                'beer1':'https://beer1-lampart.com.vn',
-                'sql_agree':'agree',
-            }
-            # switcher3 = {
-            #     'local':'2',
-            #     'dev':'115',
-            #     'debug1':'113',
-            #     'beer1':'2',
-            # }
-            url_root = switcher.get(env,'invalid')
-            # ser_enterprise_campaign = switcher1.get(env,'invalid')
-            # con_agree = switcher2.get(env,'invalid')
-            # ser_server = switcher3.get(env,'invalid')
-            if(url_root == 'invalid'):
-                continue    
-            else:
-                break
-
-        if env == 'sql_agree':
-            sql = "SELECT `agreement`.*, `agreement_adaptation`.`adaptation_date`"
-            sql += "FROM `agreement`"
-            sql += "LEFT JOIN agreement_adaptation ON agreement_adaptation.id = agreement.agreement_adaptation_id"
-            sql += " WHERE `agreement`.`partner_id` = '2750'"
-            sql += " AND `agreement_adaptation`.`adaptation_date` <=" + datetime.now().strftime('%Y-%m-%d')
-            sql += " AND `agreement`.`disable` =0"
-            sql += " ORDER BY `agreement_adaptation`.`adaptation_date` DESC"
-            print(sql)
-            exit()
-
-
+        env = combobox_var.get().lower()
+        switcher = {
+            'local':'https://dev.beer.com.vn',
+            'dev':'https://dev1.drbe.jp',
+            'debug1':'https://debug1.drbe.jp',
+            'beer1':'https://beer1-lampart.com.vn',
+            'sql_agree':'agree',
+        }
+        url_root = switcher.get(env,'invalid')
+            
 #---------------------------------------------------------------------------------------
 #---------------------------------INPUT DATA--------------------------------------------
         input = get_input.get_config()
@@ -138,7 +61,9 @@ def regis():
         birth_date_day = input['birth_date_day'] #birth_date_day = 24
         phone_no = input['phone_no'] #phone_no': '0994984984',
         # payment_card = payment_card_no_1 + payment_card_no_2 + payment_card_no_3 + payment_card_no_4
-        is_disable_brower = input['is_disable_brower'] #is_disable_brower': '0',
+        is_disable_brower = input['is_disable_brower'] #is_disable_brower': '0', 
+        # server = input['server']   
+    
 
 
 #---------------------------------------------------------------------------------------
@@ -280,38 +205,6 @@ def regis():
             "ser_option_service": ser_option_service,
             "ser_server_id": ser_server,
             "ser_product_id": water,
-            # "con_campaign_code": "",
-            # "con_agree": "2678",
-            # "con_c_first_name": "test",
-            # "con_c_last_name": "chi",
-            # "con_c_first_name_kana": "フリガナ",
-            # "con_c_last_name_kana": "フリガナ",
-            # "con_c_sex_cd": "3",
-            # "con_optin_type_premium": "1",
-            # "con_c_phone_no": "0994984984",
-            # "con_mypage_login_id": email,
-            # "con_mypage_password": password_p,
-            # "con_c_mypage_password_confirm": password_p,
-            # "con_d_delivery_address": "contract",
-            # "con_c_zipcode": "1500000",
-            # "con_c_prefecture_id": "13",
-            # "con_c_prefecture_id_text": "東京都",
-            # "con_c_address_1": "渋谷区6",
-            # "con_c_address_2": "",
-            # "con_payment_card_no_1": "3540",
-            # "con_payment_card_no_2": "1111",
-            # "con_payment_card_no_3": "1111",
-            # "con_payment_card_no_4": "1111",
-            # "con_card_name": "dsadad",
-            # "con_card_cvc": "2410",
-            # "con_gmo_authorization_shop_id": tshop,
-            # "con_campaign_page_settlement": "sett_type_gmo",
-            # "con_c_birth_date": "1993-1-1",
-            # "con_payment_card_expiration": "2024-01",
-            # "con_chosen_question_class_1": "",
-            # "con_optin_premium": "empty",
-            # "con_payment_card_no": "3540111111111111",
-            # "con_c_old_agreements": "",
             "hidden_partner_id": ser_partner_id,
             "campaign_page_settlement": 'sett_type_gmo',
             "campaign_page_code": "registration",
@@ -359,71 +252,18 @@ def regis():
             "campaign_code": "",
             "is_disable_brower": is_disable_brower
         }
-        html_rs = special_request.perform_post_request_with_button_click(url_sub_final, data_sub_final)
-
+        #selenium
+        # html_rs = special_request.perform_post_request_with_button_click(url_sub_final, data_sub_final)
+        
+        #pyppeteer
+        html_rs = asynco.run_until_complete(special_request.perform_post_request_with_button_click1(url_sub_final, data_sub_final))
         if not html_rs:
             raise Exception("FAIL IN FINAL REQUEST")
-        
-        # data_final = {
-        #     'token_mail_confirm': tmp[0], 
-        #     'ser_server': ser_server,
-        #     'ser_server_rental':'2',
-        #     'ser_server_type':'4',
-        #     'ser_plan_type':'1',
-        #     'ser_water':'211',
-        #     'ser_server_size':'3',
-        #     'ser_server_color':'3',
-        #     'ser_holder_color':'3',
-        #     'ser_customer_type':'1',
-        #     'ser_category_settlement_type':'credit_card_gmo',
-        #     'ser_enterprise_campaign':ser_enterprise_campaign, #dev 111 | local 67 | debug 143
-        #     'ser_option_service':'290',
-        #     'ser_server_id': ser_server,
-        #     'ser_product_id':'211',
-        #     'con_campaign_code':'',
-        #     'con_agree':con_agree, #2552 local||1971 debug1 || 2590 beer1 || 2678 dev1
-        #     'con_c_first_name':'provjp',
-        #     'con_c_last_name':'tool',
-        #     'con_c_first_name_kana':'フリガナ',
-        #     'con_c_last_name_kana':'フリガナ',
-        #     'con_c_sex_cd':'2',
-        #     'con_optin_type_premium':'1',
-        #     'con_c_phone_no':'0123456789',
-        #     'con_mypage_login_id':email,
-        #     'con_mypage_password':password_p,
-        #     'con_c_mypage_password_confirm':password_p,
-        #     'con_d_delivery_address':'contract',
-        #     'con_c_zipcode':'1500000',
-        #     'con_c_prefecture_id':'13',
-        #     'con_c_prefecture_id_text':'東京都',
-        #     'con_c_address_1':'渋谷区以下に掲載がない場合454',
-        #     'con_c_address_2':'',
-        #     'con_payment_card_no_1':'3540',
-        #     'con_payment_card_no_2':'1111',
-        #     'con_payment_card_no_3':'1111',
-        #     'con_payment_card_no_4':'1111',
-        #     'con_card_name':'dsadad',
-        #     'con_card_cvc':'2410',
-        #     'con_gmo_authorization_shop_id': tshop,
-        #     'con_campaign_page_settlement':'sett_type_gmo',
-        #     'con_c_birth_date':'2000-10-24',
-        #     'con_payment_card_expiration':'2026-04',
-        #     'con_chosen_question_class_1':'',
-        #     'con_optin_premium':'empty',
-        #     'con_payment_card_no':'3540111111111111',
-        #     'con_c_old_agreements':'',
-        #     'form_action':'confirm',
-        #     'result_code_gmo_token':'000',
-        #     # 'gmo_token': abc['tokenObject']['token'][0]  
-        # }
-        # z = session.post(url_final,data=data_final,headers=headers ,verify=False)
-        
-
-
         print(str(html_rs))
         text_success = html_rs.find('input', {'name': 'success_data[contract_id]'})
         text_success2 = html_rs.find('div', {'class': 'thank_you_text'})
-        if(text_success or text_success2):
+        text_success3 = html_rs.find('div', {'class': 'success_text'})
+        if(text_success or text_success2 or text_success3):
             print(email)
             print(password_p)
             # set label_password text
@@ -437,9 +277,8 @@ def regis():
     except Exception as e:
         # update_text("ALO lỗi rồi đại vương ơi !")
         print(e)
+        update_text(e)
     button.config(state="normal")
-
-
 
 def update_text(content):
     text_widget = tk.Text(window2, height=1, font=custom_font, width=20)
@@ -467,28 +306,59 @@ def copy_to_clipboard(text_widget):
     window2.clipboard_append(text)
     
 
-#label
-label = tk.Label(window2, text="Environment (local/dev/debug1/beer1)",font=custom_font)
-label_ps = tk.Label(window2, text="P/s: click chuột vào mk tk sẽ tự động copy !",font=custom_font)
-#dropdown
-values = ['local', 'dev', 'debug1','beer1']
-combobox = ttk.Combobox(window2, values=values, width=12, state="readonly", textvariable=combobox_var)
-# combobox.configure(font=custom_font)
+if __name__ == "__main__":
+    asynco = asyncio.new_event_loop()
+    tk_object = tk.Tk()
+    combobox_var = tk.StringVar()
+    tk_object.title("THE REGISTOR")
+    # tk_object.geometry("750x350+100+100")
+    tk_object.resizable(0,0)
+    custom_font = Font(family="Comic Sans MS", size=15)
 
-#button
-button = tk.Button(window2, text="Submit", width=6, height=1, font=custom_font)
-button.config(command=on_button_click)
+    window1 = tk.Frame(tk_object)
+    window1.grid(row=0, column=0, sticky='nsew')
 
-progress_bar = ttk.Progressbar(window2, orient="horizontal", mode="determinate", length=700)
+    canvas = tk.Canvas(window1, width=750, height=350)
+    canvas.grid(row=0, column=0, sticky='nsew')
 
-#grid
-label.grid(row=0, column=0, padx=10, pady=10)
-combobox.grid(row=0, column=1, padx=10, pady=10)
-button.grid(row=0, column=2, padx=10, pady=10)
-progress_bar.grid(row=2, column=0, padx=10, columnspan=3,sticky="ew")
-label_ps.grid(row=1, column=0, columnspan=3,sticky="ew")
-combobox.bind("<<ComboboxSelected>>", lambda e: combobox.configure(font=custom_font))
-combobox.set('local')
+    my_scrollbar = tk.Scrollbar(window1, orient='vertical', command=canvas.yview)
+    my_scrollbar.grid(row=0, column=1, sticky='nsew')
 
-is_running = [False]
-tk_object.mainloop()
+    canvas.configure(yscrollcommand=my_scrollbar.set)
+    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+
+    window2 = tk.Frame(canvas)
+    window2.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+    canvas.create_window((0,0), window=window2, anchor='nw')
+    window1.columnconfigure(0, weight=1)
+    window1.rowconfigure(0, weight=1)
+
+    result_get_file = get_input.generate_default_config_file(is_check_exist_default=True)
+    if not result_get_file:
+        messagebox.showinfo("Error", "Can not create config file")
+        sys.exit()
+    #label
+    label = tk.Label(window2, text="Environment (local/dev/debug1/beer1)",font=custom_font)
+    label_ps = tk.Label(window2, text="P/s: click chuột vào mk tk sẽ tự động copy !",font=custom_font)
+    #dropdown
+    values = ['local', 'dev', 'debug1','beer1']
+    combobox = ttk.Combobox(window2, values=values, width=12, state="readonly", textvariable=combobox_var)
+    # combobox.configure(font=custom_font)
+
+    #button
+    button = tk.Button(window2, text="Submit", width=6, height=1, font=custom_font)
+    button.config(command=on_button_click)
+
+    progress_bar = ttk.Progressbar(window2, orient="horizontal", mode="determinate", length=700)
+
+    #grid
+    label.grid(row=0, column=0, padx=10, pady=10)
+    combobox.grid(row=0, column=1, padx=10, pady=10)
+    button.grid(row=0, column=2, padx=10, pady=10)
+    progress_bar.grid(row=2, column=0, padx=10, columnspan=3,sticky="ew")
+    label_ps.grid(row=1, column=0, columnspan=3,sticky="ew")
+    combobox.bind("<<ComboboxSelected>>", lambda e: combobox.configure(font=custom_font))
+    combobox.set('local')
+
+    is_running = [False]
+    tk_object.mainloop()

@@ -8,12 +8,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from subprocess import CREATE_NO_WINDOW
+import asyncio
+from pyppeteer import launch
 
 
 def format_html(html):
     soup = BeautifulSoup(html, 'html.parser')
     element_debug= soup.find(id="codeigniter_profiler")
     element_head = soup.find("head")
+    element_menu = soup.find_all("div",{'class': 'thank_you_text'})
     if element_debug:
         element_debug.extract()
     if element_head:
@@ -31,7 +34,7 @@ def perform_post_request_with_button_click(url, post_data):
         service = Service()
         if post_data.get('is_disable_brower') == '1':
             chrome_options.add_argument('--headless')
-            service.creationflags = CREATE_NO_WINDOW
+            service.creation_flags = CREATE_NO_WINDOW
         # caps = chrome_options.to_capabilities()
         # caps["acceptInsecureCerts"] = True
         # user_data_dir = '--user-data-dir=./chrome-profile'
@@ -74,6 +77,74 @@ def perform_post_request_with_button_click(url, post_data):
     except Exception as e:
         print("Đã xảy ra lỗi:", e)
     driver.quit()    
+
+
+async def perform_post_request_with_button_click1(url,content):
+    headless = False
+    if content.get('is_disable_brower') == '1':
+        headless = True
+    brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True)
+    page = await brower.newPage()
+    await page.goto("https://www.google.com")
+    post_data_str = ', '.join([f'''"{key}": "{value}"''' for key, value in content.items()])
+    post_data_str = '{' + post_data_str + '}'
+    script = f"""
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "{url}";
+            var postData = {post_data_str};
+            for (var key in postData) {{
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = postData[key];
+                form.appendChild(input);
+            }}
+
+            document.body.appendChild(form);
+            form.submit();
+        """
+    await page.evaluate(script)
+    await page.waitForSelector('.btn_get_gmo_token')
+    time.sleep(1)
+    await page.click('.btn_get_gmo_token')
+    await page.waitForSelector('.redirect-url')
+    html = await page.content()
+    await brower.close()
+    return format_html(html)
+
+
+# def perform_post_request_with_button_click1(sesion_obj,url,content):
+#     # headers = {'Content-Type': 'application/json; charset=utf-8'}
+#     # sesion_obj = HTMLSession()
+#     r = sesion_obj.post(url, data=content,verify=False)
+#     # time.sleep(3)
+#     post_data_str = ', '.join([f'''"{key}": "{value}"''' for key, value in content.items()])
+#     post_data_str = '{' + post_data_str + '}'
+#     script = f"""
+#             var form = document.createElement("form");
+#             form.method = "post";
+#             var postData = {post_data_str};
+#             for (var key in postData) {{
+#                 var input = document.createElement("input");
+#                 input.type = "hidden";
+#                 input.name = key;
+#                 input.value = postData[key];
+#                 form.appendChild(input);
+#             }}
+
+#             document.body.appendChild(form);
+#     """
+#     # script = f"""
+#     #     (".btn_get_gmo_token").click();
+#     # """
+#     r.html.render(keep_page=True,wait=10,script=script)
+#     r.html.page.waitForNavigation()
+#     # r.html.page.click(".btn_get_gmo_token")
+#     time.sleep(3)
+#     print(r.html.html)
+#     return format_html(r.html.html)
+
 
 # if __name__ == "__main__":
 #     url = "https://dev.beer.com.vn/my_account"  # Thay thế URL bằng địa chỉ trang web có biểu mẫu để điền thông tin và gửi POST
