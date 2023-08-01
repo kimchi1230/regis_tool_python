@@ -27,6 +27,27 @@ def regis():
             'sql_agree':'agree',
         }
         url_root = switcher.get(env,'invalid')
+
+        input_display = {
+            'email': email_var.get(),
+            'password' : pass_var.get(),
+            'first_name': fname_var.get(),
+            'last_name': lname_var.get(),
+            'first_name_kana': fname_kana_var.get(),
+            'last_name_kana': lname_kana_var.get(),
+            'payment_card_no_1': card_var_1.get(),
+            'payment_card_no_2': card_var_2.get(),
+            'payment_card_no_3': card_var_3.get(),
+            'payment_card_no_4': card_var_4.get(),
+            'payment_expiry_year': year_card_var.get(),
+            'payment_expiry_month': month_card_var.get(),
+            'payment_card_name': card_name_var.get(),
+            'payment_card_cvc': cvc_var.get(),
+        }
+        is_write_complete = get_input.set_config(input_display)
+        if not is_write_complete:
+            messagebox.showerror('Error','Cannot write file config')
+            return
             
 #---------------------------------------------------------------------------------------
 #---------------------------------INPUT DATA--------------------------------------------
@@ -311,32 +332,32 @@ def regis():
     print(end - start)
 
 def update_text(content,env='',time = False,excution_time = 0):
-    text_widget = tk.Text(window2, height=1, font=custom_font, width=20)
+    text_widget = tk.Text(window3, height=1, font=custom_font, width=60)
     text_widget.configure(state='normal')  # Make the Text widget editable
     text_widget.insert('1.0', content)  # Insert the new value
     text_widget.configure(state='disabled')  # Make the Text widget uneditable again
     # text_widget.configure(width=len(time))
-    row = window2.grid_size()[1] + 1
-    text_widget.grid(row=row, column=0, columnspan=3, sticky="ew",padx=(10,0))
+    row = window3.grid_size()[1] + 1
+    text_widget.grid(row=row, column=0, sticky="ew",padx=(10,0))
     text_widget.bind("<Button-1>", lambda event: copy_to_clipboard(text_widget))
     
     if env:
         string_var = env+'|Excution: '+str(round(excution_time, 2))+'s'
-        text_widget_env = tk.Entry(window2, font=custom_font)
+        text_widget_env = tk.Entry(window3, font=custom_font)
         text_widget_env.configure(state='normal')  # Make the Text widget editable
         text_widget_env.insert(0,string_var)  # Insert the new value
         text_widget_env.configure(state='disabled')  # Make the Text widget uneditable again
         text_widget_env.config(width=len(string_var))
-        text_widget_env.grid(row=row, column=4, columnspan=4, sticky="ew")
+        text_widget_env.grid(row=row, column=1, sticky="ew")
 
     if time:
         time = datetime.now().strftime("%H:%M %Y/%m/%d")
-        text_widget_time = tk.Entry(window2, font=custom_font)
+        text_widget_time = tk.Entry(window3, font=custom_font)
         text_widget_time.configure(state='normal')  # Make the Text widget editable
         text_widget_time.insert(0,time)  # Insert the new value
         text_widget_time.configure(state='disabled')  # Make the Text widget uneditable again
         text_widget_time.config(width=len(time))
-        text_widget_time.grid(row=row, column=4, columnspan=4, sticky="ew")
+        text_widget_time.grid(row=row, column=1, sticky="ew")
 
 def on_button_click():
     if not is_running[0]:
@@ -358,14 +379,17 @@ def check_exits_value(data,key,str):
         raise Exception("NOT FOUND KEY "+str)
     return data[key]
 
+def mouse_wheel(event):
+    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    my_scrollbar.set(*canvas.yview())
+
 if __name__ == "__main__":
     asynco = asyncio.new_event_loop()
     tk_object = tk.Tk()
-    combobox_var = tk.StringVar()
     tk_object.title("THE REGISTOR")
     # tk_object.geometry("750x350+100+100")
-    tk_object.resizable(0,0)
-    custom_font = Font(family="Comic Sans MS", size=15)
+    tk_object.resizable(1,1)
+    custom_font = Font(family="Comic Sans MS", size=10)
 
     window1 = tk.Frame(tk_object)
     window1.grid(row=0, column=0, sticky='nsew')
@@ -380,8 +404,13 @@ if __name__ == "__main__":
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
 
     window2 = tk.Frame(canvas)
+    window3 = tk.Frame(canvas)
     window2.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+    window3.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+    window2.bind("<MouseWheel>", mouse_wheel)
+    window3.bind("<MouseWheel>", mouse_wheel)
     canvas.create_window((0,0), window=window2, anchor='nw')
+    canvas.create_window((0,215), window=window3, anchor='nw')
     window1.columnconfigure(0, weight=1)
     window1.rowconfigure(0, weight=1)
 
@@ -389,27 +418,127 @@ if __name__ == "__main__":
     if not result_get_file:
         messagebox.showinfo("Error", "Can not create config file")
         sys.exit()
+
     #label
-    label = tk.Label(window2, text="Environment (local/dev/debug1/beer1)",font=custom_font)
+    label = tk.Label(window2, text="Environment :",font=custom_font)
     label_ps = tk.Label(window2, text="P/s: single click on field to copy !",font=custom_font)
+    label_email = tk.Label(window2, text="Email :",font=custom_font)
+    label_pass = tk.Label(window2, text="Passwork :",font=custom_font)
+    label_fname = tk.Label(window2, text="First Name :",font=custom_font)
+    label_lname = tk.Label(window2, text="Last Name :",font=custom_font)
+    label_card = tk.Label(window2, text="Card :",font=custom_font)
+    label_card_name = tk.Label(window2, text="Card Name :",font=custom_font)
+    label_cvc = tk.Label(window2, text="CVC :",font=custom_font)
+    label_date = tk.Label(window2, text="Date Expired :",font=custom_font)
+    label_fname_kana = tk.Label(window2, text="First Name Kana :",font=custom_font)
+    label_lname_kana = tk.Label(window2, text="Last Name Kana :",font=custom_font)
+
+    #variable input 
+    combobox_var = tk.StringVar()
+    email_var = tk.StringVar()
+    pass_var = tk.StringVar()
+    fname_var = tk.StringVar()
+    lname_var = tk.StringVar()
+    card_var_1 = tk.StringVar()
+    card_var_2 = tk.StringVar()
+    card_var_3 = tk.StringVar()
+    card_var_4 = tk.StringVar()
+    card_name_var = tk.StringVar()
+    cvc_var = tk.StringVar()
+    year_card_var = tk.StringVar()
+    month_card_var = tk.StringVar()
+    fname_kana_var = tk.StringVar()
+    lname_kana_var = tk.StringVar()
+
+    default = get_input.get_config()
+    email_var.set(default['email'])
+    pass_var.set(default['password'])
+    fname_var.set(default['first_name'])
+    lname_var.set(default['last_name'])
+    card_var_1.set(default['payment_card_no_1'])
+    card_var_2.set(default['payment_card_no_2'])
+    card_var_3.set(default['payment_card_no_3'])
+    card_var_4.set(default['payment_card_no_4'])
+    card_name_var.set(default['payment_card_name'])
+    cvc_var.set(default['payment_card_cvc'])
+    year_card_var.set(default['payment_expiry_year'])
+    month_card_var.set(default['payment_expiry_month'])
+    fname_kana_var.set(default['first_name_kana'])
+    lname_kana_var.set(default['last_name_kana'])
+
+
     #dropdown
     values = ['local', 'dev', 'debug1','beer1']
-    combobox = ttk.Combobox(window2, values=values, width=12, state="readonly", textvariable=combobox_var)
-    # combobox.configure(font=custom_font)
+    combobox = ttk.Combobox(window2, values=values, width=22, state="readonly", textvariable=combobox_var)
+    combobox.configure(font=custom_font)
+    combobox.set('local')
+    current_year = datetime.now().year
+    years_list = [str(year) for year in range(current_year, current_year + 11)]
+    month_list = [str(month) for month in range(1, 13)]
+    date_card_combobox_year = ttk.Combobox(window2, font=custom_font, state="readonly", width=5, values=years_list)
+    date_card_combobox_year.configure(font=custom_font)
+    date_card_combobox_year.set(default['payment_expiry_year'])
+    date_card_combobox_month = ttk.Combobox(window2, font=custom_font, state="readonly", width=5 , values=month_list)
+    date_card_combobox_month.configure(font=custom_font)
+    date_card_combobox_month.set(default['payment_expiry_month'])
 
     #button
-    button = tk.Button(window2, text="Submit", width=6, height=1, font=custom_font)
+    button = tk.Button(window2, text="Submit",width=0, height=2, font=custom_font,bd=2, highlightthickness=2, highlightbackground="red")
     button.config(command=on_button_click)
 
-    progress_bar = ttk.Progressbar(window2, orient="horizontal", mode="determinate", length=900)
+    #progress bar
+    progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate", length=680)
+
+    #entry
+    email_entry = ttk.Entry(window2, width=25, font=custom_font, textvariable=email_var)
+    pass_entry = ttk.Entry(window2, font=custom_font, textvariable=pass_var)
+    fname_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_var)
+    lname_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_var)
+    card_entry_1 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_1)
+    card_entry_2 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_2)
+    card_entry_3 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_3)
+    card_entry_4 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_4)
+    card_name_entry = ttk.Entry(window2, width=1, font=custom_font, textvariable=card_name_var)
+    cvc_entry = ttk.Entry(window2, width=6, font=custom_font, textvariable=cvc_var)
+    fname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_kana_var)
+    lname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_kana_var)
 
     #grid
-    label.grid(row=0, column=0, padx=10, pady=10)
-    combobox.grid(row=0, column=1, padx=10, pady=10)
-    button.grid(row=0, column=2, padx=10, pady=10)
-    progress_bar.grid(row=2, column=0, padx=10, columnspan=3,sticky="ew")
-    label_ps.grid(row=1, column=0, columnspan=3,sticky="ew")
-    combobox.bind("<<ComboboxSelected>>", lambda e: combobox.configure(font=custom_font))
-    combobox.set('local')
+    paddingy = 3
+    paddingx = 8
+    label.grid(row=0, column=0, padx=5, pady=paddingy)
+    combobox.grid(row=0, column=1, pady=paddingy)
+    
+
+    label_email.grid(row=1, column=0, padx=paddingx, pady=paddingy)
+    email_entry.grid(row=1, column=1, sticky="ew")
+    label_pass.grid(row=2, column=0, padx=paddingx, pady=paddingy)
+    pass_entry.grid(row=2, column=1, sticky="ew")
+    label_lname.grid(row=3, column=0, padx=paddingx, pady=paddingy)
+    lname_entry.grid(row=3, column=1, sticky="ew")
+    label_fname.grid(row=4, column=0, padx=paddingx,pady=paddingy)
+    fname_entry.grid(row=4, column=1, sticky="ew")
+    label_lname_kana.grid(row=5, column=0, padx=paddingx, pady=paddingy)
+    lname_kana_entry.grid(row=5, column=1, sticky="ew")
+    label_fname_kana.grid(row=6, column=0, padx=paddingx, pady=paddingy)
+    fname_kana_entry.grid(row=6, column=1, sticky="ew")
+
+
+    label_card.grid(row=1, column=2, padx=paddingx, pady=paddingy)
+    card_entry_1.grid(row=1, column=3, sticky="ew", padx=1)
+    card_entry_2.grid(row=1, column=4, sticky="ew", padx=1)
+    card_entry_3.grid(row=1, column=5, sticky="ew", padx=1)
+    card_entry_4.grid(row=1, column=6, sticky="ew", padx=1)
+    label_card_name.grid(row=2, column=2, padx=paddingx, pady=paddingy)
+    card_name_entry.grid(row=2, column=3, sticky="ew",columnspan=4)
+    label_date.grid(row=3, column=2, padx=paddingx, pady=paddingy)
+    date_card_combobox_year.grid(row=3, column=3, sticky="ew",padx=1)
+    date_card_combobox_month.grid(row=3, column=4, sticky="ew",padx=1)
+    label_cvc.grid(row=4, column=2, padx=paddingx, pady=paddingy)
+    cvc_entry.grid(row=4, column=3, sticky="ew")
+    button.grid(row=5, column=2, sticky="ew", rowspan=2, columnspan=2, padx=paddingx, pady=paddingy)
+
+    #progress bar
+    progress_bar.grid(row=0, column=0, sticky="ew", padx=paddingx, pady=paddingy, columnspan=3)
     is_running = [False]
     tk_object.mainloop()

@@ -58,6 +58,8 @@ def set_config(content,mode = 'w',is_default = False):
         data_change = content
         if not is_default:
             data_change = get_content_write_file(content)
+            if not data_change:
+                return True
         content_file = '\n'.join([f'{key}={value}' for key, value in data_change.items()])+'\n'
         with open(file_path, mode, encoding='utf-8') as file:
             file.write(content_file)
@@ -69,10 +71,14 @@ def set_config(content,mode = 'w',is_default = False):
 # check diff content and get diff content if valid 
 def get_content_write_file(content):
     input = get_config()
+    is_change = False
     for key, value in content.items():
         if input.get(key) and input[key] != value:
             input[key] = value
-    return input
+            is_change = True
+    if is_change:
+        return input
+    return False
 
 # generate default config file
 def generate_default_config_file(is_check_exist_default = False, is_delete_previous = False):
