@@ -27,27 +27,6 @@ def regis():
             'sql_agree':'agree',
         }
         url_root = switcher.get(env,'invalid')
-
-        input_display = {
-            'email': email_var.get(),
-            'password' : pass_var.get(),
-            'first_name': fname_var.get(),
-            'last_name': lname_var.get(),
-            'first_name_kana': fname_kana_var.get(),
-            'last_name_kana': lname_kana_var.get(),
-            'payment_card_no_1': card_var_1.get(),
-            'payment_card_no_2': card_var_2.get(),
-            'payment_card_no_3': card_var_3.get(),
-            'payment_card_no_4': card_var_4.get(),
-            'payment_expiry_year': year_card_var.get(),
-            'payment_expiry_month': month_card_var.get(),
-            'payment_card_name': card_name_var.get(),
-            'payment_card_cvc': cvc_var.get(),
-        }
-        is_write_complete = get_input.set_config(input_display)
-        if not is_write_complete:
-            messagebox.showerror('Error','Cannot write file config')
-            return
             
 #---------------------------------------------------------------------------------------
 #---------------------------------INPUT DATA--------------------------------------------
@@ -327,7 +306,6 @@ def regis():
         print(e)
         end = time.time()
         update_text(e,env,excution_time=end-start)
-    button.config(state="normal")
     session.close()
     print(end - start)
 
@@ -364,8 +342,35 @@ def on_button_click():
         button.config(state="disabled")
         is_running[0] = True
         progress_bar.start()
-        thread = threading.Thread(target=regis).start()
-        # thread.join()
+        input_display = {
+            'email': email_var.get(),
+            'password' : pass_var.get(),
+            'first_name': fname_var.get(),
+            'last_name': lname_var.get(),
+            'first_name_kana': fname_kana_var.get(),
+            'last_name_kana': lname_kana_var.get(),
+            'payment_card_no_1': card_var_1.get(),
+            'payment_card_no_2': card_var_2.get(),
+            'payment_card_no_3': card_var_3.get(),
+            'payment_card_no_4': card_var_4.get(),
+            'payment_expiry_year': year_card_var.get(),
+            'payment_expiry_month': month_card_var.get(),
+            'payment_card_name': card_name_var.get(),
+            'payment_card_cvc': cvc_var.get(),
+        }
+        is_write_complete = get_input.set_config(input_display)
+        if not is_write_complete:
+            messagebox.showerror('Error','Cannot write file config')
+            return
+        mode = mode.get()
+        if mode == 'debug':
+            threading.Thread(target=special_request.regis_by_browser).start()
+            return
+        
+        if mode == 'fast':
+            threading.Thread(target=regis).start()
+            return
+        button.config(state="normal")
         is_running[0] = False
         progress_bar.stop()
 
@@ -384,6 +389,7 @@ def mouse_wheel(event):
     my_scrollbar.set(*canvas.yview())
 
 if __name__ == "__main__":
+    global result_brower
     asynco = asyncio.new_event_loop()
     tk_object = tk.Tk()
     tk_object.title("THE REGISTOR")
@@ -449,6 +455,7 @@ if __name__ == "__main__":
     month_card_var = tk.StringVar()
     fname_kana_var = tk.StringVar()
     lname_kana_var = tk.StringVar()
+    step_by_step_var = tk.BooleanVar()
 
     default = get_input.get_config()
     email_var.set(default['email'])
