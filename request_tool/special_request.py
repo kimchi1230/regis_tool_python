@@ -12,8 +12,7 @@ import get_input
 import asyncio
 import time
 from datetime import datetime
-import keyboard
-from post1 import result_brower
+import os
 
 def format_html(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -81,43 +80,44 @@ def format_html(html):
     # driver.quit()    
 
 
-async def perform_post_request_with_button_click1(url,content):
-    try:
-        headless = False
-        if content.get('is_disable_brower') == '1':
-            headless = True
-        brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True)
-        page = await brower.newPage()
-        await page.goto("https://www.google.com")
-        post_data_str = ', '.join([f'''"{key}": "{value}"''' for key, value in content.items()])
-        post_data_str = '{' + post_data_str + '}'
-        script = f"""
-                var form = document.createElement("form");
-                form.method = "post";
-                form.action = "{url}";
-                var postData = {post_data_str};
-                for (var key in postData) {{
-                    var input = document.createElement("input");
-                    input.type = "hidden";
-                    input.name = key;
-                    input.value = postData[key];
-                    form.appendChild(input);
-                }}
+# async def perform_post_request_with_button_click1(url,content):
+#     try:
+#         html_file_path = os.path.join(os.path.dirname(__file__), 'test.html')
+#         headless = False
+#         if content.get('is_disable_brower') == '1':
+#             headless = True
+#         brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True)
+#         page = await brower.newPage()
+#         await page.goto("https://www.google.com")
+#         post_data_str = ', '.join([f'''"{key}": "{value}"''' for key, value in content.items()])
+#         post_data_str = '{' + post_data_str + '}'
+#         script = f"""
+#                 var form = document.createElement("form");
+#                 form.method = "post";
+#                 form.action = "{url}";
+#                 var postData = {post_data_str};
+#                 for (var key in postData) {{
+#                     var input = document.createElement("input");
+#                     input.type = "hidden";
+#                     input.name = key;
+#                     input.value = postData[key];
+#                     form.appendChild(input);
+#                 }}
 
-                document.body.appendChild(form);
-                form.submit();
-            """
-        await page.evaluate(script)
-        await page.waitForSelector('.btn_get_gmo_token')
-        time.sleep(1)
-        await page.click('.btn_get_gmo_token')
-        await page.waitForSelector('.redirect-url')
-        html = await page.content()
-        await brower.close()
-        return format_html(html)
-    except Exception as e:
-        await brower.close()
-        return False
+#                 document.body.appendChild(form);
+#                 form.submit();
+#             """
+#         await page.evaluate(script)
+#         await page.waitForSelector('.btn_get_gmo_token')
+#         time.sleep(1)
+#         await page.click('.btn_get_gmo_token')
+#         await page.waitForSelector('.redirect-url')
+#         html = await page.content()
+#         await brower.close()
+#         return format_html(html)
+#     except Exception as e:
+#         await brower.close()
+#         return False
     
 
 async def regis_by_browser(url):
@@ -190,9 +190,52 @@ async def regis_by_browser(url):
     except Exception as e:
         return False
 
-
+async def get_gmo_token(env,tshop):
+    input = get_input.get_config()
+    switcher = {
+        'local':'https://dev.beer.com.vn',
+        'dev':'https://dev1.drbe.jp',
+        'debug1':'https://debug1.drbe.jp',
+        'beer1':'https://beer1-lampart.com.vn'
+    }
+    url_root = switcher.get(env,'invalid')
+    card = input['payment_card_no_1']+input['payment_card_no_2']+input['payment_card_no_3']+input['payment_card_no_4']
+    expire = input['payment_expiry_year'][-2:]+input['payment_expiry_month']
+    html_file_path = os.path.join(os.path.dirname(__file__), 'test.html')+ '?env='+ url_root
+    headless = False
+    if input.get('is_disable_brower') == '1':
+        headless = True
+    brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,args=['--ignore-certificate-errors'])   
+    page = await brower.newPage()
+    await page.goto(html_file_path)
+    script = f""" 
+                 Multipayment.init("{tshop}");
+                 Multipayment.getToken({{
+                        cardno       : "{card}",
+                        expire       : "{expire}",
+                        securitycode : "{input['payment_card_cvc']}",
+                        holdername   : "{input['payment_card_name']}",
+                        tokennumber  : 1
+                 }}, function(response){{
+                    console.log(response.resultCode);
+                    console.log(response.tokenObject.token[0]);
+                    document.getElementById("resultCode").innerHTML = response.resultCode;
+                    document.getElementById("token").innerHTML = response.tokenObject.token[0];
+                 }});"""
+    await page.evaluate(script)
+    await asyncio.sleep(1)
+    html = await page.content()
+    soup_token = BeautifulSoup(html, 'html.parser')
+    token = soup_token.find(id='token').text
+    result = soup_token.find(id='resultCode').text
+    await brower.close()
+    return {
+        'status':result,
+        'token':token,
+    }
+   
 
 if __name__ == "__main__":
-    asyncio.run(regis_by_browser(''))
+    asyncio.run(get_gmo_token(''))
 
     # perform_post_request_with_button_click(url, post_data)

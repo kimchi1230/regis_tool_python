@@ -17,6 +17,7 @@ import asyncio
 
 def regis():
     try:
+        is_running[0] = True
         start = time.time()
         env = combobox_var.get().lower()
         switcher = {
@@ -75,7 +76,7 @@ def regis():
         session = requests.Session()
         csrf_key = 'chideptrai'
         headers ={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36'}
-        # url_final = url_root+'/register/success/code/registration'
+        url_final = url_root+'/register/success/code/registration'
         url_step1 = url_root+'/register/server/entrymailaddress'
         # url_step2 = 'https://pt01.mul-pay.jp/ext/api/getToken?key=nVmYmre0TWuwsXF9IX3VFuCRMf%2F%2FSPXLipsFpT1NnTfzRYP7M7bqAk4LV0HvqzH%2BqrtBRlCZbQXprTO9gUuQXHETLB9ZASlDTMAnVtgiorhUdnM75dk69Jg9al4LvwdXAEgVQQa%2Ffnc2t0EjNaskHvOuLQM8frtoeu77AbhOkuHnGaFnLtjbimUfIgIv1e%2BtQXn6uxYu2RHAhniTlXqDnBxPDrNE2xXneNQZdBwmlHPhW%2FIvUwoyfe9ijBSC6XO%2Be6Ca6j10eORigBvmIVr4LXYWATX%2FV6Bi6Jxqf2saiYsSVhQNDN0V1CH6S%2FgYo2gmRzMR7iL290djASkm9dXGNw%3D%3D&callback=gmo_token_add&publicKey=tshop00058724&encrypted=NM9vLhqVOoV4gcsHCpuWfBJNjRnM2QL9GLiKwH%2FBhm8FUME%2FdNPuiqrWKVNijDA7&seal=05f2e38bc68df7c68619e0b31b6c8f1e4dfc8f7a&version=5'
         url_step3 = url_root+'/register/server/code/registration'
@@ -216,75 +217,128 @@ def regis():
 #-----------------------------------------------------------------------------------------
 #---------------------------------SEND REQUEST 3------------------------------------------  
 
-
-        data_sub_final = {
-            "token_mail_confirm": tmp[0],
-            "ser_server": ser_server,
-            "ser_server_rental": server_rental,
-            "ser_plan_type": plan_type,
-            "ser_water": water,
-            "ser_holder_color": holder_color,
-            "ser_customer_type": customer_type,
-            "ser_category_settlement_type": settlement_type,
-            "ser_enterprise_campaign": ser_enterprise_campaign,
-            "ser_option_service": ser_option_service,
-            "ser_server_id": ser_server,
-            "ser_product_id": water,
-            "hidden_partner_id": ser_partner_id,
-            "campaign_page_settlement": 'sett_type_gmo',
-            "campaign_page_code": "registration",
-            "c_old_agreements": "",
-            "form_action": "contract",
-            "c_last_name": last_name,
-            "c_first_name": first_name,
-            "c_last_name_kana": last_name_kana,
-            "c_first_name_kana": first_name_kana,
-            "c_sex_cd": sex_cd,
-            "c_birth_date_year": birth_date_year,
-            "c_birth_date_month": birth_date_month,
-            "c_birth_date_day": birth_date_day,
-            "c_zipcode": zipcode,
-            "c_prefecture_id_text": prefecture_id_text,
-            "c_prefecture": prefecture,
-            "c_address_1": address_1,
-            "c_address_2": address_2,
-            "c_phone_no": phone_no,
-            "login_id": email,
-            "optin_type_premium": "1",
-            "mypage_password": password_p,
-            "c_mypage_password_confirm": password_p,
-            "d_delivery_address": "contract",
-            "d_last_name": "",
-            "d_first_name": "",
-            "d_last_name_kana": "",
-            "d_first_name_kana": "",
-            "d_zipcode": "",
-            "d_prefecture_id_text": "",
-            "d_prefecture": "",
-            "d_address_1": "",
-            "d_address_2": "",
-            "d_phone_no": "",
-            "gmo_authorization_shop_id": tshop,
-            "payment_card_no_1": payment_card_no_1,
-            "payment_card_no_2": payment_card_no_2,
-            "payment_card_no_3": payment_card_no_3,
-            "payment_card_no_4": payment_card_no_4,
-            "payment_expiry_year": payment_expiry_year,
-            "payment_expiry_month": payment_expiry_month,
-            "payment_card_name": payment_card_name,
-            "payment_card_cvc": payment_card_cvc,
-            "agree": con_agree,
-            "campaign_code": "",
-            "is_disable_brower": is_disable_brower
-        }
+        # data_sub_final = {
+        #     "token_mail_confirm": tmp[0],
+        #     "ser_server": ser_server,
+        #     "ser_server_rental": server_rental,
+        #     "ser_plan_type": plan_type,
+        #     "ser_water": water,
+        #     "ser_holder_color": holder_color,
+        #     "ser_customer_type": customer_type,
+        #     "ser_category_settlement_type": settlement_type,
+        #     "ser_enterprise_campaign": ser_enterprise_campaign,
+        #     "ser_option_service": ser_option_service,
+        #     "ser_server_id": ser_server,
+        #     "ser_product_id": water,
+        #     "hidden_partner_id": ser_partner_id,
+        #     "campaign_page_settlement": 'sett_type_gmo',
+        #     "campaign_page_code": "registration",
+        #     "c_old_agreements": "",
+        #     "form_action": "contract",
+        #     "c_last_name": last_name,
+        #     "c_first_name": first_name,
+        #     "c_last_name_kana": last_name_kana,
+        #     "c_first_name_kana": first_name_kana,
+        #     "c_sex_cd": sex_cd,
+        #     "c_birth_date_year": birth_date_year,
+        #     "c_birth_date_month": birth_date_month,
+        #     "c_birth_date_day": birth_date_day,
+        #     "c_zipcode": zipcode,
+        #     "c_prefecture_id_text": prefecture_id_text,
+        #     "c_prefecture": prefecture,
+        #     "c_address_1": address_1,
+        #     "c_address_2": address_2,
+        #     "c_phone_no": phone_no,
+        #     "login_id": email,
+        #     "optin_type_premium": "1",
+        #     "mypage_password": password_p,
+        #     "c_mypage_password_confirm": password_p,
+        #     "d_delivery_address": "contract",
+        #     "d_last_name": "",
+        #     "d_first_name": "",
+        #     "d_last_name_kana": "",
+        #     "d_first_name_kana": "",
+        #     "d_zipcode": "",
+        #     "d_prefecture_id_text": "",
+        #     "d_prefecture": "",
+        #     "d_address_1": "",
+        #     "d_address_2": "",
+        #     "d_phone_no": "",
+        #     "gmo_authorization_shop_id": tshop,
+        #     "payment_card_no_1": payment_card_no_1,
+        #     "payment_card_no_2": payment_card_no_2,
+        #     "payment_card_no_3": payment_card_no_3,
+        #     "payment_card_no_4": payment_card_no_4,
+        #     "payment_expiry_year": payment_expiry_year,
+        #     "payment_expiry_month": payment_expiry_month,
+        #     "payment_card_name": payment_card_name,
+        #     "payment_card_cvc": payment_card_cvc,
+        #     "agree": con_agree,
+        #     "campaign_code": "",
+        #     "is_disable_brower": is_disable_brower
+        # }
         #selenium
         # html_rs = special_request.perform_post_request_with_button_click(url_sub_final, data_sub_final)
         
         #pyppeteer
-        html_rs = asynco.run_until_complete(special_request.perform_post_request_with_button_click1(url_sub_final, data_sub_final))
-        if not html_rs:
+        # html_rs = asynco.run_until_complete(special_request.perform_post_request_with_button_click1(url_sub_final, data_sub_final))
+        token = asyncio.run(special_request.get_gmo_token(env,tshop))
+        if token['status'] == '551':
             raise Exception("FINAL REQUEST FAIL")
-        
+        data_final = {
+            'token_mail_confirm': tmp[0], 
+            'ser_server': ser_server,
+            'ser_server_rental':server_rental,
+            'ser_server_type':'4',
+            'ser_plan_type':plan_type,
+            'ser_water':water,
+            'ser_server_size':'3',
+            'ser_server_color':'3',
+            'ser_holder_color':holder_color,
+            'ser_customer_type':customer_type,
+            'ser_category_settlement_type':settlement_type,
+            'ser_enterprise_campaign':ser_enterprise_campaign, #dev 111 | local 67 | debug 143
+            'ser_option_service':ser_option_service,
+            'ser_server_id': ser_server,
+            'ser_product_id':water,
+            'con_campaign_code':'',
+            'con_agree':con_agree, #2552 local||1971 debug1 || 2590 beer1 || 2678 dev1
+            'con_c_first_name':first_name,
+            'con_c_last_name':last_name,
+            'con_c_first_name_kana':first_name_kana,
+            'con_c_last_name_kana':last_name_kana,
+            'con_c_sex_cd':sex_cd,
+            'con_optin_type_premium':'1',
+            'con_c_phone_no':phone_no,
+            'con_mypage_login_id':email,
+            'con_mypage_password':password_p,
+            'con_c_mypage_password_confirm':password_p,
+            'con_d_delivery_address':'contract',
+            'con_c_zipcode':zipcode,
+            'con_c_prefecture_id':prefecture,
+            'con_c_prefecture_id_text':prefecture_id_text,
+            'con_c_address_1':address_1,
+            'con_c_address_2':'',
+            'con_payment_card_no_1':payment_card_no_1,
+            'con_payment_card_no_2':payment_card_no_2,
+            'con_payment_card_no_3':payment_card_no_3,
+            'con_payment_card_no_4':payment_card_no_4,
+            'con_card_name':payment_card_name,
+            'con_card_cvc':payment_card_cvc,
+            'con_gmo_authorization_shop_id': tshop,
+            'con_campaign_page_settlement':'sett_type_gmo',
+            'con_c_birth_date': birth_date_year+'-'+birth_date_month+'-'+birth_date_day,
+            'con_payment_card_expiration':payment_expiry_year+'-'+payment_expiry_month,
+            'con_chosen_question_class_1':'',
+            'con_optin_premium':'empty',
+            'con_payment_card_no':payment_card_no_1+payment_card_no_2+payment_card_no_3+payment_card_no_4,
+            'con_c_old_agreements':'',
+            'form_action':'confirm',
+            'result_code_gmo_token':token['status'],
+            'gmo_token':token['token'],
+        }
+        html_rs = session.post(url_final,data=data_final,headers=headers ,verify=False)
+        html_rs = special_request.format_html(html_rs.text)
         print(str(html_rs))
         text_success = html_rs.find('input', {'name': 'success_data[contract_id]'})
         text_success2 = html_rs.find('div', {'class': 'thank_you_text'})
@@ -340,7 +394,6 @@ def update_text(content,env='',time = False,excution_time = 0):
 def on_button_click():
     if not is_running[0]:
         button.config(state="disabled")
-        is_running[0] = True
         progress_bar.start()
         input_display = {
             'email': email_var.get(),
@@ -362,14 +415,14 @@ def on_button_click():
         if not is_write_complete:
             messagebox.showerror('Error','Cannot write file config')
             return
-        mode = mode.get()
-        if mode == 'debug':
-            threading.Thread(target=special_request.regis_by_browser).start()
-            return
-        
-        if mode == 'fast':
-            threading.Thread(target=regis).start()
-            return
+        # mode = mode.get()
+        # if mode == 'debug':
+        #     threading.Thread(target=special_request.regis_by_browser).start()
+        #     return
+        threading.Thread(target=regis).start()
+        # if mode == 'fast':
+        #     threading.Thread(target=regis).start()
+        #     return
         button.config(state="normal")
         is_running[0] = False
         progress_bar.stop()
