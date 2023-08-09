@@ -1,23 +1,23 @@
-from http.cookiejar import Cookie
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import os
 import tkinter as tk
 from tkinter.font import Font
 from tkinter import ttk
 import threading
 import tkinter.messagebox as messagebox
-from requests_html import HTMLSession 
 import special_request
 import time
 import get_input
 import sys
 import asyncio
+import json
+
 
 def regis():
     try:
         is_running[0] = True
+        button.config(state="disabled")
         start = time.time()
         env = combobox_var.get().lower()
         switcher = {
@@ -78,10 +78,9 @@ def regis():
         headers ={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36'}
         url_final = url_root+'/register/success/code/registration'
         url_step1 = url_root+'/register/server/entrymailaddress'
-        # url_step2 = 'https://pt01.mul-pay.jp/ext/api/getToken?key=nVmYmre0TWuwsXF9IX3VFuCRMf%2F%2FSPXLipsFpT1NnTfzRYP7M7bqAk4LV0HvqzH%2BqrtBRlCZbQXprTO9gUuQXHETLB9ZASlDTMAnVtgiorhUdnM75dk69Jg9al4LvwdXAEgVQQa%2Ffnc2t0EjNaskHvOuLQM8frtoeu77AbhOkuHnGaFnLtjbimUfIgIv1e%2BtQXn6uxYu2RHAhniTlXqDnBxPDrNE2xXneNQZdBwmlHPhW%2FIvUwoyfe9ijBSC6XO%2Be6Ca6j10eORigBvmIVr4LXYWATX%2FV6Bi6Jxqf2saiYsSVhQNDN0V1CH6S%2FgYo2gmRzMR7iL290djASkm9dXGNw%3D%3D&callback=gmo_token_add&publicKey=tshop00058724&encrypted=NM9vLhqVOoV4gcsHCpuWfBJNjRnM2QL9GLiKwH%2FBhm8FUME%2FdNPuiqrWKVNijDA7&seal=05f2e38bc68df7c68619e0b31b6c8f1e4dfc8f7a&version=5'
         url_step3 = url_root+'/register/server/code/registration'
         url_agree = url_root+'/register/contract/code/registration'
-        url_sub_final = url_root+'/register/confirm/code/registration'
+        # url_sub_final = url_root+'/register/confirm/code/registration'
 #---------------------------------------------------------------------------------------
 #---------------------------------SYSTEM DATA-------------------------------------------
 
@@ -343,6 +342,8 @@ def regis():
         text_success = html_rs.find('input', {'name': 'success_data[contract_id]'})
         text_success2 = html_rs.find('div', {'class': 'thank_you_text'})
         text_success3 = html_rs.find('div', {'class': 'success_text'})
+        end = time.time()
+        excution_time = end-start
         if(text_success or text_success2 or text_success3):
             print(email)
             print(password_p)
@@ -353,16 +354,19 @@ def regis():
             update_text(password_p,time=True)
             progress_bar["value"] = 100
             progress_bar.update()
+            get_input.generate_history_file({'email':email,'password':password_p,'excution_time':round(excution_time,2),'date':datetime.now().strftime("%H:%M %Y/%m/%d")})
         else:
             raise Exception("FINAL REQUEST PROCESS FAIL")
     except Exception as e:
         # update_text("ALO lỗi rồi đại vương ơi !")
         print(e)
-        end = time.time()
-        update_text(e,env,excution_time=end-start)
+        update_text(e,env,excution_time=excution_time)
     session.close()
-    print(end - start)
+    print(excution_time)
+    button.config(state="normal")
+    is_running[0] = False   
 
+#---------UPDATE RESULT TEXT-----------------
 def update_text(content,env='',time = False,excution_time = 0):
     text_widget = tk.Text(window3, height=1, font=custom_font, width=60)
     text_widget.configure(state='normal')  # Make the Text widget editable
@@ -391,10 +395,20 @@ def update_text(content,env='',time = False,excution_time = 0):
         text_widget_time.config(width=len(time))
         text_widget_time.grid(row=row, column=1, sticky="ew")
 
+#---------CALL FUNCTION REGIS BY BROWER-----------------
+def do_regis_by_brower():
+    env = combobox_var.get().lower()
+    button.config(state="disabled")
+    result_brower = asyncio.run(special_request.regis_by_browser(env))
+    if result_brower:
+        update_text(result_brower['email'],env,excution_time=result_brower['excution_time'])
+        update_text(result_brower['password'],time=True)
+        get_input.generate_history_file({'email':result_brower['email'],'password':result_brower['password'],'excution_time':round(result_brower['excution_time'],2),'date':datetime.now().strftime("%H:%M %Y/%m/%d")})
+    button.config(state="normal")
+
+#---------ONCLICK TRIGGER FUNCTION-----------------
 def on_button_click():
     if not is_running[0]:
-        button.config(state="disabled")
-        progress_bar.start()
         input_display = {
             'email': email_var.get(),
             'password' : pass_var.get(),
@@ -410,44 +424,88 @@ def on_button_click():
             'payment_expiry_month': month_card_var.get(),
             'payment_card_name': card_name_var.get(),
             'payment_card_cvc': cvc_var.get(),
+            'zipcode': zipcode_var.get(),
+            'prefecture': prefecture_id_var.get(),
+            'prefecture_id_text': prefecture_var.get(),
+            'address_1': address1_var.get(),
         }
         is_write_complete = get_input.set_config(input_display)
         if not is_write_complete:
             messagebox.showerror('Error','Cannot write file config')
             return
-        # mode = mode.get()
-        # if mode == 'debug':
-        #     threading.Thread(target=special_request.regis_by_browser).start()
-        #     return
-        threading.Thread(target=regis).start()
-        # if mode == 'fast':
-        #     threading.Thread(target=regis).start()
-        #     return
-        button.config(state="normal")
-        is_running[0] = False
-        progress_bar.stop()
+        mode = mode_var.get()
+        if mode == 'manual':
+            threading.Thread(target=do_regis_by_brower).start()
+            return
+        if mode == 'fast':
+            threading.Thread(target=regis).start()
+            return
 
+#---------COPY TO CLIPBOARD-----------------
 def copy_to_clipboard(text_widget):
     text = text_widget.get("1.0", "end-1c")
     window2.clipboard_clear()
     window2.clipboard_append(text)
 
+#---------CHECK VALUE EXIST-----------------
 def check_exits_value(data,key,str):
     if data[key] is None:
         raise Exception("NOT FOUND KEY "+str)
     return data[key]
 
+#---------EVENT MOUSE WHEEL-----------------
 def mouse_wheel(event):
     canvas.yview_scroll(int(-1*(event.delta/120)), "units")
     my_scrollbar.set(*canvas.yview())
 
+#---------GET ZIPCODE INFORMATION-----------------
+def get_zipcode_info():
+    env = combobox_var.get().lower()
+    switcher = {
+            'local':'https://dev.beer.com.vn',
+            'dev':'https://dev1.drbe.jp',
+            'debug1':'https://debug1.drbe.jp',
+            'beer1':'https://beer1-lampart.com.vn',
+            'sql_agree':'agree',
+        }
+    url_root = switcher.get(env,'invalid')
+    url = url_root +'/register/common/ajax_get_zipcode_information_for_new_lp'
+    header = {
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36",
+        "X-Requested-With": "xmlhttprequest",
+    }
+    data_zipcode = {
+        'group':'delivery_new',
+        'c_zipcode':zipcode_var.get(),
+        'water_id':211,
+    }
+    request_zipcode = requests.post(url,data=data_zipcode,headers=header,verify=False)
+    directory_zipcode = json.loads(request_zipcode.text)
+    if(directory_zipcode['status'] == 1):
+        print(directory_zipcode['data'])
+        prefecture_var.set(directory_zipcode['data']['pref_name'])
+        prefecture_id_var.set(directory_zipcode['data']['pref_id'])
+        address1_var.set(str(directory_zipcode['data']['city_name']) + str(directory_zipcode['data']['town_name']) + '123')
+
+#---------EVENT FOCUSOUT ZIPCODE-----------------
+def on_focusout_zipcode(event):
+    global entry_modified
+    if entry_modified:
+        entry_modified = False
+        threading.Thread(target=get_zipcode_info).start()
+
+def entry_modified(e):
+    global entry_modified
+    entry_modified = True
+
 if __name__ == "__main__":
-    global result_brower
     asynco = asyncio.new_event_loop()
     tk_object = tk.Tk()
     tk_object.title("THE REGISTOR")
     # tk_object.geometry("750x350+100+100")
-    tk_object.resizable(1,1)
+    tk_object.resizable(0,0)
+    tk_object.bind_all("<Button-1>", lambda event: event.widget.focus_set() if isinstance(event.widget, tk.Widget) else None)
     custom_font = Font(family="Comic Sans MS", size=10)
 
     window1 = tk.Frame(tk_object)
@@ -478,20 +536,6 @@ if __name__ == "__main__":
         messagebox.showinfo("Error", "Can not create config file")
         sys.exit()
 
-    #label
-    label = tk.Label(window2, text="Environment :",font=custom_font)
-    label_ps = tk.Label(window2, text="P/s: single click on field to copy !",font=custom_font)
-    label_email = tk.Label(window2, text="Email :",font=custom_font)
-    label_pass = tk.Label(window2, text="Passwork :",font=custom_font)
-    label_fname = tk.Label(window2, text="First Name :",font=custom_font)
-    label_lname = tk.Label(window2, text="Last Name :",font=custom_font)
-    label_card = tk.Label(window2, text="Card :",font=custom_font)
-    label_card_name = tk.Label(window2, text="Card Name :",font=custom_font)
-    label_cvc = tk.Label(window2, text="CVC :",font=custom_font)
-    label_date = tk.Label(window2, text="Date Expired :",font=custom_font)
-    label_fname_kana = tk.Label(window2, text="First Name Kana :",font=custom_font)
-    label_lname_kana = tk.Label(window2, text="Last Name Kana :",font=custom_font)
-
     #variable input 
     combobox_var = tk.StringVar()
     email_var = tk.StringVar()
@@ -508,8 +552,13 @@ if __name__ == "__main__":
     month_card_var = tk.StringVar()
     fname_kana_var = tk.StringVar()
     lname_kana_var = tk.StringVar()
-    step_by_step_var = tk.BooleanVar()
+    mode_var = tk.StringVar()
+    zipcode_var = tk.StringVar()
+    prefecture_var = tk.StringVar()
+    prefecture_id_var = tk.StringVar()
+    address1_var = tk.StringVar()
 
+    #set default value
     default = get_input.get_config()
     email_var.set(default['email'])
     pass_var.set(default['password'])
@@ -525,6 +574,10 @@ if __name__ == "__main__":
     month_card_var.set(default['payment_expiry_month'])
     fname_kana_var.set(default['first_name_kana'])
     lname_kana_var.set(default['last_name_kana'])
+    zipcode_var.set(default['zipcode'])
+    prefecture_var.set(default['prefecture_id_text'])
+    prefecture_id_var.set(default['prefecture'])
+    address1_var.set(default['address_1'])
 
 
     #dropdown
@@ -532,15 +585,18 @@ if __name__ == "__main__":
     combobox = ttk.Combobox(window2, values=values, width=22, state="readonly", textvariable=combobox_var)
     combobox.configure(font=custom_font)
     combobox.set('local')
+    # combobox.bind("<<ComboboxSelected>>", on_focusout_zipcode)
     current_year = datetime.now().year
     years_list = [str(year) for year in range(current_year, current_year + 11)]
-    month_list = [str(month) for month in range(1, 13)]
-    date_card_combobox_year = ttk.Combobox(window2, font=custom_font, state="readonly", width=5, values=years_list)
+    month_list = [str(f'{month:02d}') for month in range(1, 13)]
+    date_card_combobox_year = ttk.Combobox(window2, font=custom_font, state="readonly", width=5, values=years_list,textvariable=year_card_var)
     date_card_combobox_year.configure(font=custom_font)
     date_card_combobox_year.set(default['payment_expiry_year'])
-    date_card_combobox_month = ttk.Combobox(window2, font=custom_font, state="readonly", width=5 , values=month_list)
+    date_card_combobox_month = ttk.Combobox(window2, font=custom_font, state="readonly", width=5 , values=month_list ,textvariable=month_card_var)
     date_card_combobox_month.configure(font=custom_font)
     date_card_combobox_month.set(default['payment_expiry_month'])
+    mode_combobox = ttk.Combobox(window2, font=custom_font, state="readonly", width=5 , values=['fast', 'manual'],textvariable=mode_var)
+    mode_combobox.set('fast')
 
     #button
     button = tk.Button(window2, text="Submit",width=0, height=2, font=custom_font,bd=2, highlightthickness=2, highlightbackground="red")
@@ -548,6 +604,25 @@ if __name__ == "__main__":
 
     #progress bar
     progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate", length=680)
+
+     #label
+    label = tk.Label(window2, text="Environment :",font=custom_font)
+    label_ps = tk.Label(window2, text="P/s: single click on field to copy !",font=custom_font)
+    label_email = tk.Label(window2, text="Email :",font=custom_font)
+    label_pass = tk.Label(window2, text="Passwork :",font=custom_font)
+    label_fname = tk.Label(window2, text="First Name :",font=custom_font)
+    label_lname = tk.Label(window2, text="Last Name :",font=custom_font)
+    label_card = tk.Label(window2, text="Card :",font=custom_font)
+    label_card_name = tk.Label(window2, text="Card Name :",font=custom_font)
+    label_cvc = tk.Label(window2, text="CVC :",font=custom_font)
+    label_date = tk.Label(window2, text="Date Expired :",font=custom_font)
+    label_fname_kana = tk.Label(window2, text="First Name Kana :",font=custom_font)
+    label_lname_kana = tk.Label(window2, text="Last Name Kana :",font=custom_font)
+    label_mode = tk.Label(window2, text="Mode :",font=custom_font)
+    label_zipcode = tk.Label(window2, text="Zipcode :",font=custom_font)
+    label_prefecture = tk.Label(window2, text="Prefecture :",font=custom_font)
+    label_prefecture_id = tk.Label(window2, text="Prefecture ID :",font=custom_font)
+    label_address1 = tk.Label(window2, text="Address 1 :",font=custom_font)
 
     #entry
     email_entry = ttk.Entry(window2, width=25, font=custom_font, textvariable=email_var)
@@ -558,16 +633,30 @@ if __name__ == "__main__":
     card_entry_2 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_2)
     card_entry_3 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_3)
     card_entry_4 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_4)
+    card_entry_1.configure(state='readonly')
+    card_entry_2.configure(state='readonly')
+    card_entry_3.configure(state='readonly')
+    card_entry_4.configure(state='readonly')
     card_name_entry = ttk.Entry(window2, width=1, font=custom_font, textvariable=card_name_var)
     cvc_entry = ttk.Entry(window2, width=6, font=custom_font, textvariable=cvc_var)
     fname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_kana_var)
     lname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_kana_var)
+    zipcode_entry = ttk.Entry(window2, font=custom_font, textvariable=zipcode_var)
+    is_modified = False
+    zipcode_entry.bind("<Key>", entry_modified)
+    zipcode_entry.bind("<FocusOut>", on_focusout_zipcode)
+    prefecture_entry = ttk.Entry(window2, font=custom_font, textvariable=prefecture_var)
+    prefecture_id_entry = ttk.Entry(window2, font=custom_font, textvariable=prefecture_id_var)
+    prefecture_id_entry.configure(state='readonly')
+    address1_entry = ttk.Entry(window2, font=custom_font, textvariable=address1_var)
 
     #grid
     paddingy = 3
     paddingx = 8
     label.grid(row=0, column=0, padx=5, pady=paddingy)
     combobox.grid(row=0, column=1, pady=paddingy)
+    label_mode.grid(row=0, column=2, pady=paddingy)
+    mode_combobox.grid(row=0, column=3, pady=paddingy)
     
 
     label_email.grid(row=1, column=0, padx=paddingx, pady=paddingy)
@@ -583,20 +672,28 @@ if __name__ == "__main__":
     label_fname_kana.grid(row=6, column=0, padx=paddingx, pady=paddingy)
     fname_kana_entry.grid(row=6, column=1, sticky="ew")
 
+    label_zipcode.grid(row=1, column=2, padx=paddingx, pady=paddingy)
+    zipcode_entry.grid(row=1, column=3, sticky="ew")
+    label_prefecture.grid(row=2, column=2, padx=paddingx, pady=paddingy)
+    prefecture_entry.grid(row=2, column=3, sticky="ew")
+    label_prefecture_id.grid(row=3, column=2, padx=paddingx, pady=paddingy)
+    prefecture_id_entry.grid(row=3, column=3, sticky="ew")
+    label_address1.grid(row=4, column=2, padx=paddingx, pady=paddingy)
+    address1_entry.grid(row=4, column=3, sticky="ew")
 
-    label_card.grid(row=1, column=2, padx=paddingx, pady=paddingy)
-    card_entry_1.grid(row=1, column=3, sticky="ew", padx=1)
-    card_entry_2.grid(row=1, column=4, sticky="ew", padx=1)
-    card_entry_3.grid(row=1, column=5, sticky="ew", padx=1)
-    card_entry_4.grid(row=1, column=6, sticky="ew", padx=1)
-    label_card_name.grid(row=2, column=2, padx=paddingx, pady=paddingy)
-    card_name_entry.grid(row=2, column=3, sticky="ew",columnspan=4)
-    label_date.grid(row=3, column=2, padx=paddingx, pady=paddingy)
-    date_card_combobox_year.grid(row=3, column=3, sticky="ew",padx=1)
-    date_card_combobox_month.grid(row=3, column=4, sticky="ew",padx=1)
-    label_cvc.grid(row=4, column=2, padx=paddingx, pady=paddingy)
-    cvc_entry.grid(row=4, column=3, sticky="ew")
-    button.grid(row=5, column=2, sticky="ew", rowspan=2, columnspan=2, padx=paddingx, pady=paddingy)
+    label_card.grid(row=1, column=5, padx=paddingx, pady=paddingy)
+    card_entry_1.grid(row=1, column=6, sticky="ew", padx=1)
+    card_entry_2.grid(row=1, column=7, sticky="ew", padx=1)
+    card_entry_3.grid(row=1, column=8, sticky="ew", padx=1)
+    card_entry_4.grid(row=1, column=9, sticky="ew", padx=1)
+    label_card_name.grid(row=2, column=5, padx=paddingx, pady=paddingy)
+    card_name_entry.grid(row=2, column=6, sticky="ew",columnspan=4)
+    label_date.grid(row=3, column=5, padx=paddingx, pady=paddingy)
+    date_card_combobox_year.grid(row=3, column=6, sticky="ew",padx=1)
+    date_card_combobox_month.grid(row=3, column=7, sticky="ew",padx=1)
+    label_cvc.grid(row=4, column=5, padx=paddingx, pady=paddingy)
+    cvc_entry.grid(row=4, column=6, sticky="ew")
+    button.grid(row=5, column=2, sticky="ew", rowspan=2, padx=paddingx, pady=paddingy)
 
     #progress bar
     progress_bar.grid(row=0, column=0, sticky="ew", padx=paddingx, pady=paddingy, columnspan=3)

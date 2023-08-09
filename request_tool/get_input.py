@@ -1,4 +1,5 @@
 import os
+import json
 
 input = {}
 input_default = {
@@ -39,17 +40,12 @@ input_default = {
 #---------------YOU CAN CHANGE IF YOU SURE DATA IS VALID IN SERVER----------------
 }
 
-file_path = os.path.join(os.path.expanduser("~"), "Documents","config_input.txt")
+file_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","config_input.json")
 
 #read file config
 def get_config():
     with open(file_path, 'r', encoding='utf-8') as file:
-        for line in file:
-            line = line.strip()
-            key, value = line.split('=')
-            key = key.strip()
-            line = line.strip()
-            input[key] = value
+        input = json.load(file)
     return input
 
 #write file config
@@ -60,9 +56,8 @@ def set_config(content,mode = 'w',is_default = False):
             data_change = get_content_write_file(content)
             if not data_change:
                 return True
-        content_file = '\n'.join([f'{key}={value}' for key, value in data_change.items()])+'\n'
         with open(file_path, mode, encoding='utf-8') as file:
-            file.write(content_file)
+            json.dump(data_change, file, indent=4, ensure_ascii=False)
         return True
     except Exception as e:
         print(e)
@@ -86,21 +81,103 @@ def generate_default_config_file(is_check_exist_default = False, is_delete_previ
         return True
     if is_delete_previous and os.path.exists(file_path):
         os.remove(file_path)
-    return set_config(input_default,'a+',True)
+    folder_name = os.path.join(os.path.expanduser("~"), "Documents","regis_tool")
+    if not os.path.exists(folder_name):
+        os.mkdir(folder_name)
+    result_txt_file = set_config(input_default,'a+',True)
+    result_html_file = generate_html_file('')
+    return result_txt_file or result_html_file
     
+def generate_html_file(content):
+    try:
+        html_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","post1.html")
+        if os.path.exists(html_path):
+            return True
+        content = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+            </head>
+            <body>
+            <div id="url"></div>
+            <div id="resultCode"></div>
+            <div id="token"></div>
+            <script>
+                const urlParams = new URLSearchParams(window.location.search);
+                let env = urlParams.get('env');
+                url = env + '/public/common/js/multipayment_gmo_token_test.js';
+                document.getElementById("url").innerHTML = url;
+                var newScript = document.createElement('script');
+                newScript.src = url;
+                document.head.appendChild(newScript);
+
+                // const cardno = urlParams.get('cardno');
+                // const expire = urlParams.get('expire');
+                // const cvc = urlParams.get('cvc');
+                // const name = urlParams.get('name');
+                // const tshop = urlParams.get('tshop');
+                // const cardno = "3540111111111111";
+                // const expire = "2605";
+                // const cvc = "1234";
+                // const name = "TEST";
+                // const tshop = "tshop00060960";
+
+                // Multipayment.init(tshop);
+                // Multipayment.getToken({
+                //         cardno       : cardno,
+                //         expire       : expire,
+                //         securitycode : cvc,
+                //         holdername   : name,
+                //         tokennumber  : 1
+                // }, function(response){
+                //     console.log(response.resultCode);
+                //     console.log(response.tokenObject.token[0]);
+                //     document.getElementById("resultCode").innerHTML = response.resultCode;
+                //     document.getElementById("token").innerHTML = response.tokenObject.token[0];
+                // });
+            </script>
+            </body>
+            </html>
+        """
+        with open(html_path, 'w', encoding='utf-8') as file:
+            file.write(content)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+def generate_history_file(data):
+    try:
+        time = data['date'][:5]
+        date = data['date'][6:]
+        history_data = {
+            'email': data['email'],
+            'password': data['password'],
+            'excution_time': data['excution_time'],
+            'time': time,
+        }
+        history_data_file = {}
+        history_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","history.json")
+        if os.path.exists(history_path):
+            with open(history_path, 'r', encoding='utf-8') as file:
+                if file:
+                    history_data_file = json.load(file)
+
+        if history_data_file.get(date):
+            history_data_file[date].append(history_data)
+        else:
+            history_data_file[date] = [history_data]
+        
+        with open(history_path, 'w', encoding='utf-8') as file:
+            json.dump(history_data_file, file, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+def main():
+    generate_history_file('')
 
 
-
-# def main():
-#     rs = generate_default_config_file()
-#     print(get_config())
-#     set_config({
-#         'email': 'abcxuz',
-#         'pass' : 'asadsadad',
-#     })
-#     print(rs)
-#     print(get_config())
-
-
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()

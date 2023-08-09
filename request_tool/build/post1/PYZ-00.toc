@@ -1011,26 +1011,6 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\doctest.py',
    'PYMODULE'),
-  ('dotenv',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\dotenv\\__init__.py',
-   'PYMODULE'),
-  ('dotenv.ipython',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\dotenv\\ipython.py',
-   'PYMODULE'),
-  ('dotenv.main',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\dotenv\\main.py',
-   'PYMODULE'),
-  ('dotenv.parser',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\dotenv\\parser.py',
-   'PYMODULE'),
-  ('dotenv.variables',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\dotenv\\variables.py',
-   'PYMODULE'),
   ('email',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\email\\__init__.py',
@@ -1130,30 +1110,6 @@
   ('exceptiongroup._version',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\exceptiongroup\\_version.py',
-   'PYMODULE'),
-  ('fake_useragent',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\fake_useragent\\__init__.py',
-   'PYMODULE'),
-  ('fake_useragent.errors',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\fake_useragent\\errors.py',
-   'PYMODULE'),
-  ('fake_useragent.fake',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\fake_useragent\\fake.py',
-   'PYMODULE'),
-  ('fake_useragent.log',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\fake_useragent\\log.py',
-   'PYMODULE'),
-  ('fake_useragent.settings',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\fake_useragent\\settings.py',
-   'PYMODULE'),
-  ('fake_useragent.utils',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\fake_useragent\\utils.py',
    'PYMODULE'),
   ('fractions',
    'C:\\Users\\Kim '
@@ -1370,6 +1326,98 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\ipaddress.py',
    'PYMODULE'),
+  ('jinja2',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\__init__.py',
+   'PYMODULE'),
+  ('jinja2._identifier',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\_identifier.py',
+   'PYMODULE'),
+  ('jinja2.async_utils',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\async_utils.py',
+   'PYMODULE'),
+  ('jinja2.bccache',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\bccache.py',
+   'PYMODULE'),
+  ('jinja2.compiler',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\compiler.py',
+   'PYMODULE'),
+  ('jinja2.constants',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\constants.py',
+   'PYMODULE'),
+  ('jinja2.debug',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\debug.py',
+   'PYMODULE'),
+  ('jinja2.defaults',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\defaults.py',
+   'PYMODULE'),
+  ('jinja2.environment',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\environment.py',
+   'PYMODULE'),
+  ('jinja2.exceptions',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\exceptions.py',
+   'PYMODULE'),
+  ('jinja2.ext',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\ext.py',
+   'PYMODULE'),
+  ('jinja2.filters',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\filters.py',
+   'PYMODULE'),
+  ('jinja2.idtracking',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\idtracking.py',
+   'PYMODULE'),
+  ('jinja2.lexer',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\lexer.py',
+   'PYMODULE'),
+  ('jinja2.loaders',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\loaders.py',
+   'PYMODULE'),
+  ('jinja2.nodes',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\nodes.py',
+   'PYMODULE'),
+  ('jinja2.optimizer',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\optimizer.py',
+   'PYMODULE'),
+  ('jinja2.parser',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\parser.py',
+   'PYMODULE'),
+  ('jinja2.runtime',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\runtime.py',
+   'PYMODULE'),
+  ('jinja2.sandbox',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\sandbox.py',
+   'PYMODULE'),
+  ('jinja2.tests',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\tests.py',
+   'PYMODULE'),
+  ('jinja2.utils',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\utils.py',
+   'PYMODULE'),
+  ('jinja2.visitor',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\jinja2\\visitor.py',
+   'PYMODULE'),
   ('json',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\json\\__init__.py',
@@ -1489,6 +1537,14 @@
   ('lzma',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\lzma.py',
+   'PYMODULE'),
+  ('markupsafe',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\markupsafe\\__init__.py',
+   'PYMODULE'),
+  ('markupsafe._native',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\markupsafe\\_native.py',
    'PYMODULE'),
   ('matplotlib',
    'C:\\Users\\Kim '
@@ -2527,10 +2583,6 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\packaging\\version.py',
    'PYMODULE'),
-  ('parse',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\parse.py',
-   'PYMODULE'),
   ('pdb',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\pdb.py',
@@ -2622,6 +2674,14 @@
   ('py_compile',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\py_compile.py',
+   'PYMODULE'),
+  ('py_mini_racer',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\py_mini_racer\\__init__.py',
+   'PYMODULE'),
+  ('py_mini_racer.py_mini_racer',
+   'C:\\Users\\Kim '
+   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\py_mini_racer\\py_mini_racer.py',
    'PYMODULE'),
   ('pycparser',
    'C:\\Users\\Kim '
@@ -2839,26 +2899,6 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pyppeteer\\worker.py',
    'PYMODULE'),
-  ('pyquery',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pyquery\\__init__.py',
-   'PYMODULE'),
-  ('pyquery.cssselectpatch',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pyquery\\cssselectpatch.py',
-   'PYMODULE'),
-  ('pyquery.openers',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pyquery\\openers.py',
-   'PYMODULE'),
-  ('pyquery.pyquery',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pyquery\\pyquery.py',
-   'PYMODULE'),
-  ('pyquery.text',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pyquery\\text.py',
-   'PYMODULE'),
   ('queue',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\queue.py',
@@ -2939,10 +2979,6 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\requests\\utils.py',
    'PYMODULE'),
-  ('requests_html',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\requests_html.py',
-   'PYMODULE'),
   ('rlcompleter',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\rlcompleter.py',
@@ -2958,362 +2994,6 @@
   ('selectors',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\selectors.py',
-   'PYMODULE'),
-  ('selenium',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\__init__.py',
-   'PYMODULE'),
-  ('selenium.common',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\common\\__init__.py',
-   'PYMODULE'),
-  ('selenium.common.exceptions',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\common\\exceptions.py',
-   'PYMODULE'),
-  ('selenium.types',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\types.py',
-   'PYMODULE'),
-  ('selenium.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chrome',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chrome\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chrome.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chrome\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chrome.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chrome\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chrome.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chrome\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chromium',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chromium\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chromium.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chromium\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chromium.remote_connection',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chromium\\remote_connection.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chromium.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chromium\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.chromium.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\chromium\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.action_chains',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\action_chains.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.action_builder',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\action_builder.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.input_device',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\input_device.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.interaction',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\interaction.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.key_actions',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\key_actions.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.key_input',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\key_input.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.mouse_button',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\mouse_button.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.pointer_actions',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\pointer_actions.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.pointer_input',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\pointer_input.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.wheel_actions',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\wheel_actions.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.actions.wheel_input',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\actions\\wheel_input.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.alert',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\alert.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.by',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\by.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.desired_capabilities',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\desired_capabilities.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.driver_finder',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\driver_finder.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.html5',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\html5\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.html5.application_cache',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\html5\\application_cache.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.keys',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\keys.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.print_page_options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\print_page_options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.proxy',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\proxy.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.selenium_manager',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\selenium_manager.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.timeouts',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\timeouts.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.utils',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\utils.py',
-   'PYMODULE'),
-  ('selenium.webdriver.common.virtual_authenticator',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\common\\virtual_authenticator.py',
-   'PYMODULE'),
-  ('selenium.webdriver.edge',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\edge\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.edge.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\edge\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.edge.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\edge\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.edge.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\edge\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox.firefox_binary',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\firefox_binary.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox.firefox_profile',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\firefox_profile.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox.remote_connection',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\remote_connection.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.firefox.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\firefox\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.ie',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\ie\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.ie.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\ie\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.ie.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\ie\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.ie.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\ie\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.bidi_connection',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\bidi_connection.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.command',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\command.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.errorhandler',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.file_detector',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\file_detector.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.mobile',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\mobile.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.remote_connection',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\remote_connection.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.script_key',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\script_key.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.shadowroot',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\shadowroot.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.switch_to',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\switch_to.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.utils',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\utils.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.remote.webelement',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\remote\\webelement.py',
-   'PYMODULE'),
-  ('selenium.webdriver.safari',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\safari\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.safari.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\safari\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.safari.remote_connection',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\safari\\remote_connection.py',
-   'PYMODULE'),
-  ('selenium.webdriver.safari.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\safari\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.safari.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\safari\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.support',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\support\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.support.expected_conditions',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\support\\expected_conditions.py',
-   'PYMODULE'),
-  ('selenium.webdriver.support.relative_locator',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\support\\relative_locator.py',
-   'PYMODULE'),
-  ('selenium.webdriver.support.select',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\support\\select.py',
-   'PYMODULE'),
-  ('selenium.webdriver.support.ui',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\support\\ui.py',
-   'PYMODULE'),
-  ('selenium.webdriver.support.wait',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\support\\wait.py',
-   'PYMODULE'),
-  ('selenium.webdriver.webkitgtk',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\webkitgtk\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.webkitgtk.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\webkitgtk\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.webkitgtk.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\webkitgtk\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.webkitgtk.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\webkitgtk\\webdriver.py',
-   'PYMODULE'),
-  ('selenium.webdriver.wpewebkit',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\wpewebkit\\__init__.py',
-   'PYMODULE'),
-  ('selenium.webdriver.wpewebkit.options',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\wpewebkit\\options.py',
-   'PYMODULE'),
-  ('selenium.webdriver.wpewebkit.service',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\wpewebkit\\service.py',
-   'PYMODULE'),
-  ('selenium.webdriver.wpewebkit.webdriver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\selenium\\webdriver\\wpewebkit\\webdriver.py',
    'PYMODULE'),
   ('setuptools',
    'C:\\Users\\Kim '
@@ -4146,85 +3826,9 @@
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\uuid.py',
    'PYMODULE'),
-  ('w3lib',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\w3lib\\__init__.py',
-   'PYMODULE'),
-  ('w3lib._types',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\w3lib\\_types.py',
-   'PYMODULE'),
-  ('w3lib.encoding',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\w3lib\\encoding.py',
-   'PYMODULE'),
-  ('w3lib.util',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\w3lib\\util.py',
-   'PYMODULE'),
   ('webbrowser',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\webbrowser.py',
-   'PYMODULE'),
-  ('webdriver_manager',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\__init__.py',
-   'PYMODULE'),
-  ('webdriver_manager.chrome',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\chrome.py',
-   'PYMODULE'),
-  ('webdriver_manager.core',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\__init__.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.archive',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\archive.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.config',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\config.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.constants',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\constants.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.download_manager',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\download_manager.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.driver',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\driver.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.driver_cache',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\driver_cache.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.http',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\http.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.logger',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\logger.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.manager',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\manager.py',
-   'PYMODULE'),
-  ('webdriver_manager.core.utils',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\core\\utils.py',
-   'PYMODULE'),
-  ('webdriver_manager.drivers',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\drivers\\__init__.py',
-   'PYMODULE'),
-  ('webdriver_manager.drivers.chrome',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\webdriver_manager\\drivers\\chrome.py',
    'PYMODULE'),
   ('websockets',
    'C:\\Users\\Kim '
@@ -4349,38 +3953,6 @@
   ('xml',
    'C:\\Users\\Kim '
    'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\__init__.py',
-   'PYMODULE'),
-  ('xml.dom',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\__init__.py',
-   'PYMODULE'),
-  ('xml.dom.NodeFilter',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\NodeFilter.py',
-   'PYMODULE'),
-  ('xml.dom.domreg',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\domreg.py',
-   'PYMODULE'),
-  ('xml.dom.expatbuilder',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\expatbuilder.py',
-   'PYMODULE'),
-  ('xml.dom.minicompat',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\minicompat.py',
-   'PYMODULE'),
-  ('xml.dom.minidom',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\minidom.py',
-   'PYMODULE'),
-  ('xml.dom.pulldom',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\pulldom.py',
-   'PYMODULE'),
-  ('xml.dom.xmlbuilder',
-   'C:\\Users\\Kim '
-   'Chi\\AppData\\Local\\Programs\\Python\\Python310\\lib\\xml\\dom\\xmlbuilder.py',
    'PYMODULE'),
   ('xml.parsers',
    'C:\\Users\\Kim '

@@ -13,6 +13,7 @@ import asyncio
 import time
 from datetime import datetime
 import os
+from py_mini_racer import py_mini_racer
 
 def format_html(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -120,11 +121,10 @@ def format_html(html):
 #         return False
     
 
-async def regis_by_browser(url):
+async def regis_by_browser(env):
     try:
         start = time.time()
         input = get_input.get_config()
-        env = 'local'
         switcher = {
             'local':'https://dev.beer.com.vn',
             'dev':'https://dev1.drbe.jp',
@@ -149,11 +149,12 @@ async def regis_by_browser(url):
         await page.click('input[name="agreement"]')
         await page.click('#email_register_address')
         
-
+        await page.waitForNavigation()
         await page.waitForSelector('#option_service')
         await page.click('#personal_credit_gmo')
         await page.click('#btn_next_step')
 
+        await page.waitForNavigation()
         await page.waitForSelector('#c_last_name')
         await page.type('#c_last_name',input['last_name'])
         await page.type('#c_first_name',input['first_name'])
@@ -178,17 +179,22 @@ async def regis_by_browser(url):
         await page.click('input[name="agree"][type="checkbox"]')
         await page.click('.btn_next_step')
 
-        await page.waitForSelector('.btn_get_gmo_token')
-        await page.click('.btn_get_gmo_token')
+        await page.waitForNavigation()
+        await page.waitForSelector('.btn_next_step')
+        await asyncio.sleep(1)
+        await page.click('.btn_next_step')
         await page.waitForSelector('.redirect-url')
         end = time.time()
+        await brower.close()
         return {
             'email':email,
             'password':input['password'],
             'excution_time':end-start
         }
     except Exception as e:
+        await brower.close()
         return False
+        
 
 async def get_gmo_token(env,tshop):
     input = get_input.get_config()
@@ -201,7 +207,7 @@ async def get_gmo_token(env,tshop):
     url_root = switcher.get(env,'invalid')
     card = input['payment_card_no_1']+input['payment_card_no_2']+input['payment_card_no_3']+input['payment_card_no_4']
     expire = input['payment_expiry_year'][-2:]+input['payment_expiry_month']
-    html_file_path = os.path.join(os.path.dirname(__file__), 'test.html')+ '?env='+ url_root
+    html_file_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","post1.html") + '?env='+ url_root
     headless = False
     if input.get('is_disable_brower') == '1':
         headless = True
@@ -233,9 +239,8 @@ async def get_gmo_token(env,tshop):
         'status':result,
         'token':token,
     }
-   
 
-if __name__ == "__main__":
-    asyncio.run(get_gmo_token(''))
+# if __name__ == "__main__":
+#     get_gmo_token_js()
 
     # perform_post_request_with_button_click(url, post_data)
