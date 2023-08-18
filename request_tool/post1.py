@@ -12,6 +12,7 @@ import get_input
 import sys
 import asyncio
 import json
+from tkinter.scrolledtext import ScrolledText
 
 
 def regis():
@@ -64,6 +65,10 @@ def regis():
         phone_no = input['phone_no'] #phone_no': '0994984984',
         # payment_card = payment_card_no_1 + payment_card_no_2 + payment_card_no_3 + payment_card_no_4
         is_disable_brower = input['is_disable_brower'] #is_disable_brower': '0', 
+        company_name = input['company_name'] #company_name': 'lampart',
+        company_name_kana = input['company_name_kana'] #company_name_kana': 'フリガナ',
+        charge_name = input['charge_name'] #charge_name': 'chi',
+        charge_name_kana = input['charge_name_kana'] #フリガナ': 'チ',
         # server = input['server']   
 #---------------------------------------------------------------------------------------
 #---------------------------------INPUT DATA--------------------------------------------
@@ -336,6 +341,19 @@ def regis():
             'result_code_gmo_token':token['status'],
             'gmo_token':token['token'],
         }
+        if customer_type == '2':
+            del data_final['con_c_first_name']
+            del data_final['con_c_last_name']
+            del data_final['con_c_first_name_kana']
+            del data_final['con_c_last_name_kana']
+            data_company = {
+                'con_c_company_full_name': company_name,
+                'con_c_company_full_name_kana': company_name_kana,
+                'con_c_charge_name': charge_name,
+                'con_c_charge_name_kana': charge_name_kana,
+            }
+            data_final = {**data_final, **data_company}
+        
         html_rs = session.post(url_final,data=data_final,headers=headers ,verify=False)
         html_rs = special_request.format_html(html_rs.text)
         print(str(html_rs))
@@ -349,51 +367,31 @@ def regis():
             print(password_p)
             # set label_password text
             end = time.time()
-            update_text(email,env,excution_time=end-start)
-            # set label_password text   
-            update_text(password_p,time=True)
             progress_bar["value"] = 100
             progress_bar.update()
-            get_input.generate_history_file({'email':email,'password':password_p,'excution_time':round(excution_time,2),'date':datetime.now().strftime("%H:%M %Y/%m/%d")})
+            result_save = {
+                'email':email,
+                'password':password_p,
+                'excution_time':round(excution_time,2),
+                'date':datetime.now().strftime("%H:%M %Y/%m/%d"),
+                'env':env
+            }
+            get_input.generate_history_file(result_save)
+            text_widget_history.configure(state='normal')
+            text_widget_history.insert("1.0",''.join((f"{key}: {value}\n" for key,value in result_save.items()))+"==================================================\n")
         else:
             raise Exception("FINAL REQUEST PROCESS FAIL")
     except Exception as e:
         # update_text("ALO lỗi rồi đại vương ơi !")
         print(e)
-        update_text(e,env,excution_time=excution_time)
+        text_widget_history.configure(state='normal')
+        text_widget_history.insert("1.0",e+"==================================================\n")
     session.close()
     print(excution_time)
     button.config(state="normal")
+    text_widget_history.configure(state='disable')
     is_running[0] = False   
 
-#---------UPDATE RESULT TEXT-----------------
-def update_text(content,env='',time = False,excution_time = 0):
-    text_widget = tk.Text(window3, height=1, font=custom_font, width=60)
-    text_widget.configure(state='normal')  # Make the Text widget editable
-    text_widget.insert('1.0', content)  # Insert the new value
-    text_widget.configure(state='disabled')  # Make the Text widget uneditable again
-    # text_widget.configure(width=len(time))
-    row = window3.grid_size()[1] + 1
-    text_widget.grid(row=row, column=0, sticky="ew",padx=(10,0))
-    text_widget.bind("<Button-1>", lambda event: copy_to_clipboard(text_widget))
-    
-    if env:
-        string_var = env+'|Excution: '+str(round(excution_time, 2))+'s'
-        text_widget_env = tk.Entry(window3, font=custom_font)
-        text_widget_env.configure(state='normal')  # Make the Text widget editable
-        text_widget_env.insert(0,string_var)  # Insert the new value
-        text_widget_env.configure(state='disabled')  # Make the Text widget uneditable again
-        text_widget_env.config(width=len(string_var))
-        text_widget_env.grid(row=row, column=1, sticky="ew")
-
-    if time:
-        time = datetime.now().strftime("%H:%M %Y/%m/%d")
-        text_widget_time = tk.Entry(window3, font=custom_font)
-        text_widget_time.configure(state='normal')  # Make the Text widget editable
-        text_widget_time.insert(0,time)  # Insert the new value
-        text_widget_time.configure(state='disabled')  # Make the Text widget uneditable again
-        text_widget_time.config(width=len(time))
-        text_widget_time.grid(row=row, column=1, sticky="ew")
 
 #---------CALL FUNCTION REGIS BY BROWER-----------------
 def do_regis_by_brower():
@@ -401,9 +399,15 @@ def do_regis_by_brower():
     button.config(state="disabled")
     result_brower = asyncio.run(special_request.regis_by_browser(env))
     if result_brower:
-        update_text(result_brower['email'],env,excution_time=result_brower['excution_time'])
-        update_text(result_brower['password'],time=True)
-        get_input.generate_history_file({'email':result_brower['email'],'password':result_brower['password'],'excution_time':round(result_brower['excution_time'],2),'date':datetime.now().strftime("%H:%M %Y/%m/%d")})
+        result_data = {
+            'email':result_brower['email'],
+            'password':result_brower['password'],
+            'excution_time':round(result_brower['excution_time'],2),
+            'date':datetime.now().strftime("%H:%M %Y/%m/%d"),
+            'env':env
+        }
+        text_widget_history.insert("1.0",''.join((f"{key}: {value}\n" for key,value in result_data.items()))+"==================================================\n")
+        get_input.generate_history_file(result_data)
     button.config(state="normal")
 
 #---------ONCLICK TRIGGER FUNCTION-----------------
@@ -428,6 +432,11 @@ def on_button_click():
             'prefecture': prefecture_id_var.get(),
             'prefecture_id_text': prefecture_var.get(),
             'address_1': address1_var.get(),
+            'customer_type': customer_type_var.get(),
+            'company_name': company_name_var.get(),
+            'company_name_kana': company_name_kana_var.get(),
+            'charge_name': charge_name_var.get(),
+            'charge_name_kana': charge_name_kana_var.get(),
         }
         is_write_complete = get_input.set_config(input_display)
         if not is_write_complete:
@@ -452,11 +461,6 @@ def check_exits_value(data,key,str):
     if data[key] is None:
         raise Exception("NOT FOUND KEY "+str)
     return data[key]
-
-#---------EVENT MOUSE WHEEL-----------------
-def mouse_wheel(event):
-    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-    my_scrollbar.set(*canvas.yview())
 
 #---------GET ZIPCODE INFORMATION-----------------
 def get_zipcode_info():
@@ -499,19 +503,74 @@ def entry_modified(e):
     global entry_modified
     entry_modified = True
 
+#---------EVENT MOUSE WHEEL-----------------
+def mouse_wheel(event):
+    if isinstance(event.widget, tk.Widget)  and not isinstance(event.widget, ScrolledText):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        my_scrollbar.set(*canvas.yview())
+    
+def show_entries():
+    customer_type = customer_type_var.get()
+    if customer_type == '1':
+        label_lname.config(text='Last Name :')
+        label_fname.config(text='First Name :')
+        label_lname_kana.config(text='Last Name Kana:')
+        label_fname_kana.config(text='First Name Kana :')
+        charge_name_or_lname_entry.config(textvariable=lname_var)
+        charge_name_or_lname_kana_entry.config(textvariable=lname_kana_var)
+        company_name_or_fname_entry.config(textvariable=fname_var)
+        company_name_or_fname_kana_entry.config(textvariable=fname_kana_var)
+    if customer_type == '2':
+        label_lname.config(text='Charge Name :')
+        label_fname.config(text='Company Name :')
+        label_lname_kana.config(text='Charge Name Kana :')
+        label_fname_kana.config(text='Company Name Kana :')
+        charge_name_or_lname_entry.config(textvariable=charge_name_var)
+        charge_name_or_lname_kana_entry.config(textvariable=charge_name_kana_var)
+        company_name_or_fname_entry.config(textvariable=company_name_var)
+        company_name_or_fname_kana_entry.config(textvariable=company_name_kana_var)
+
+    label_lname.grid(row=4, column=0, padx=paddingx, pady=paddingy)
+    charge_name_or_lname_entry.grid(row=4, column=1, sticky="ew")
+    label_fname.grid(row=5, column=0, padx=paddingx,pady=paddingy)
+    company_name_or_fname_entry.grid(row=5, column=1, sticky="ew")
+    label_lname_kana.grid(row=6, column=0, padx=paddingx, pady=paddingy)
+    charge_name_or_lname_kana_entry.grid(row=6, column=1, sticky="ew")
+    label_fname_kana.grid(row=7, column=0, padx=paddingx, pady=paddingy)
+    company_name_or_fname_kana_entry.grid(row=7, column=1, sticky="ew")
+
+
+def display_scroll_text(history_data,is_specific_date=False):
+        text_widget_history.configure(state='normal')
+        text_widget_history.delete("1.0",tk.END)
+        if is_specific_date:
+            history_data = history_data.get(is_specific_date)
+            if not history_data:
+                text_widget_history.insert("end","No data\n")
+                text_widget_history.configure(state='disable')
+                return
+            for history in history_data[::-1]:
+                text_widget_history.insert("end",''.join((f"{key}: {value +' '+is_specific_date if key == 'time' else value}\n" for key,value in history.items()))+"==================================================\n")
+            text_widget_history.configure(state='disable')
+            return
+        for date, histories in sorted(history_data.items(), key=lambda item: item[0], reverse=True):
+            for history in histories[::-1]:
+                text_widget_history.insert("end",''.join((f"{key}: {value +' '+date if key == 'time' else value}\n" for key,value in history.items()))+"==================================================\n")
+        text_widget_history.configure(state='disable')
+
+tk_object = tk.Tk()
 if __name__ == "__main__":
     asynco = asyncio.new_event_loop()
-    tk_object = tk.Tk()
     tk_object.title("THE REGISTOR")
     # tk_object.geometry("750x350+100+100")
-    tk_object.resizable(0,0)
+    tk_object.resizable(1,1)
     tk_object.bind_all("<Button-1>", lambda event: event.widget.focus_set() if isinstance(event.widget, tk.Widget) else None)
     custom_font = Font(family="Comic Sans MS", size=10)
 
     window1 = tk.Frame(tk_object)
     window1.grid(row=0, column=0, sticky='nsew')
 
-    canvas = tk.Canvas(window1, width=1250, height=350)
+    canvas = tk.Canvas(window1, width=1000, height=700)
     canvas.grid(row=0, column=0, sticky='nsew')
 
     my_scrollbar = tk.Scrollbar(window1, orient='vertical', command=canvas.yview)
@@ -519,17 +578,15 @@ if __name__ == "__main__":
 
     canvas.configure(yscrollcommand=my_scrollbar.set)
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+    tk_object.bind_all("<MouseWheel>", mouse_wheel)
 
     window2 = tk.Frame(canvas)
     window3 = tk.Frame(canvas)
     window2.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
     window3.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
-    window2.bind("<MouseWheel>", mouse_wheel)
-    window3.bind("<MouseWheel>", mouse_wheel)
-    canvas.create_window((0,0), window=window2, anchor='nw')
-    canvas.create_window((0,215), window=window3, anchor='nw')
-    window1.columnconfigure(0, weight=1)
-    window1.rowconfigure(0, weight=1)
+    window2_canvas = canvas.create_window((0,0), window=window2, anchor='nw')
+    window3_canvas = canvas.create_window((0,250), window=window3,anchor='nw')
+    canvas.bind('<Configure>', lambda event: canvas.itemconfig(window2_canvas, height=event.height))
 
     result_get_file = get_input.generate_default_config_file(is_check_exist_default=True)
     if not result_get_file:
@@ -537,55 +594,38 @@ if __name__ == "__main__":
         sys.exit()
 
     #variable input 
-    combobox_var = tk.StringVar()
-    email_var = tk.StringVar()
-    pass_var = tk.StringVar()
-    fname_var = tk.StringVar()
-    lname_var = tk.StringVar()
-    card_var_1 = tk.StringVar()
-    card_var_2 = tk.StringVar()
-    card_var_3 = tk.StringVar()
-    card_var_4 = tk.StringVar()
-    card_name_var = tk.StringVar()
-    cvc_var = tk.StringVar()
-    year_card_var = tk.StringVar()
-    month_card_var = tk.StringVar()
-    fname_kana_var = tk.StringVar()
-    lname_kana_var = tk.StringVar()
-    mode_var = tk.StringVar()
-    zipcode_var = tk.StringVar()
-    prefecture_var = tk.StringVar()
-    prefecture_id_var = tk.StringVar()
-    address1_var = tk.StringVar()
-
-    #set default value
     default = get_input.get_config()
-    email_var.set(default['email'])
-    pass_var.set(default['password'])
-    fname_var.set(default['first_name'])
-    lname_var.set(default['last_name'])
-    card_var_1.set(default['payment_card_no_1'])
-    card_var_2.set(default['payment_card_no_2'])
-    card_var_3.set(default['payment_card_no_3'])
-    card_var_4.set(default['payment_card_no_4'])
-    card_name_var.set(default['payment_card_name'])
-    cvc_var.set(default['payment_card_cvc'])
-    year_card_var.set(default['payment_expiry_year'])
-    month_card_var.set(default['payment_expiry_month'])
-    fname_kana_var.set(default['first_name_kana'])
-    lname_kana_var.set(default['last_name_kana'])
-    zipcode_var.set(default['zipcode'])
-    prefecture_var.set(default['prefecture_id_text'])
-    prefecture_id_var.set(default['prefecture'])
-    address1_var.set(default['address_1'])
+    combobox_var = tk.StringVar(value='local')
+    email_var = tk.StringVar(value=default['email'])
+    pass_var = tk.StringVar(value=default['password'])
+    fname_var = tk.StringVar(value=default['first_name'])
+    lname_var = tk.StringVar(value=default['last_name'])
+    card_var_1 = tk.StringVar(value=default['payment_card_no_1'])
+    card_var_2 = tk.StringVar(value=default['payment_card_no_2'])
+    card_var_3 = tk.StringVar(value=default['payment_card_no_3'])
+    card_var_4 = tk.StringVar(value=default['payment_card_no_4'])
+    card_name_var = tk.StringVar(value=default['payment_card_name'])
+    cvc_var = tk.StringVar(value=default['payment_card_cvc'])
+    year_card_var = tk.StringVar(value=default['payment_expiry_year'])
+    month_card_var = tk.StringVar(value=default['payment_expiry_month'])
+    fname_kana_var = tk.StringVar(value=default['first_name_kana'])
+    lname_kana_var = tk.StringVar(value=default['last_name_kana'])
+    mode_var = tk.StringVar(value='fast')
+    zipcode_var = tk.StringVar(value=default['zipcode'])
+    prefecture_var = tk.StringVar(value=default['prefecture_id_text'])
+    prefecture_id_var = tk.StringVar(value=default['prefecture'])
+    address1_var = tk.StringVar(value=default['address_1'])
+    customer_type_var = tk.StringVar(value=default['customer_type'])
+    company_name_var = tk.StringVar(value=default['company_name'])
+    company_name_kana_var = tk.StringVar(value=default['company_name_kana'])
+    charge_name_var = tk.StringVar(value=default['charge_name'])
+    charge_name_kana_var = tk.StringVar(value=default['charge_name_kana'])
 
 
     #dropdown
     values = ['local', 'dev', 'debug1','beer1']
     combobox = ttk.Combobox(window2, values=values, width=22, state="readonly", textvariable=combobox_var)
     combobox.configure(font=custom_font)
-    combobox.set('local')
-    # combobox.bind("<<ComboboxSelected>>", on_focusout_zipcode)
     current_year = datetime.now().year
     years_list = [str(year) for year in range(current_year, current_year + 11)]
     month_list = [str(f'{month:02d}') for month in range(1, 13)]
@@ -596,18 +636,12 @@ if __name__ == "__main__":
     date_card_combobox_month.configure(font=custom_font)
     date_card_combobox_month.set(default['payment_expiry_month'])
     mode_combobox = ttk.Combobox(window2, font=custom_font, state="readonly", width=5 , values=['fast', 'manual'],textvariable=mode_var)
-    mode_combobox.set('fast')
 
     #button
-    button = tk.Button(window2, text="Submit",width=0, height=2, font=custom_font,bd=2, highlightthickness=2, highlightbackground="red")
-    button.config(command=on_button_click)
-
-    #progress bar
-    progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate", length=680)
+    button = tk.Button(window2, text="Submit",width=0, height=2, font=custom_font,bd=2, highlightthickness=2, highlightbackground="red",command=on_button_click)
 
      #label
     label = tk.Label(window2, text="Environment :",font=custom_font)
-    label_ps = tk.Label(window2, text="P/s: single click on field to copy !",font=custom_font)
     label_email = tk.Label(window2, text="Email :",font=custom_font)
     label_pass = tk.Label(window2, text="Passwork :",font=custom_font)
     label_fname = tk.Label(window2, text="First Name :",font=custom_font)
@@ -627,28 +661,27 @@ if __name__ == "__main__":
     #entry
     email_entry = ttk.Entry(window2, width=25, font=custom_font, textvariable=email_var)
     pass_entry = ttk.Entry(window2, font=custom_font, textvariable=pass_var)
-    fname_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_var)
-    lname_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_var)
-    card_entry_1 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_1)
-    card_entry_2 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_2)
-    card_entry_3 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_3)
-    card_entry_4 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_4)
-    card_entry_1.configure(state='readonly')
-    card_entry_2.configure(state='readonly')
-    card_entry_3.configure(state='readonly')
-    card_entry_4.configure(state='readonly')
+    company_name_or_fname_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_var)
+    charge_name_or_lname_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_var)
+    card_entry_1 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_1,state='readonly')
+    card_entry_2 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_2,state='readonly')
+    card_entry_3 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_3,state='readonly')
+    card_entry_4 = ttk.Entry(window2, width=6, font=custom_font, textvariable=card_var_4,state='readonly')
     card_name_entry = ttk.Entry(window2, width=1, font=custom_font, textvariable=card_name_var)
     cvc_entry = ttk.Entry(window2, width=6, font=custom_font, textvariable=cvc_var)
-    fname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_kana_var)
-    lname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_kana_var)
+    company_name_or_fname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=fname_kana_var)
+    charge_name_or_lname_kana_entry = ttk.Entry(window2, font=custom_font, textvariable=lname_kana_var)
     zipcode_entry = ttk.Entry(window2, font=custom_font, textvariable=zipcode_var)
     is_modified = False
     zipcode_entry.bind("<Key>", entry_modified)
     zipcode_entry.bind("<FocusOut>", on_focusout_zipcode)
     prefecture_entry = ttk.Entry(window2, font=custom_font, textvariable=prefecture_var)
-    prefecture_id_entry = ttk.Entry(window2, font=custom_font, textvariable=prefecture_id_var)
-    prefecture_id_entry.configure(state='readonly')
+    prefecture_id_entry = ttk.Entry(window2, font=custom_font, textvariable=prefecture_id_var,state='readonly')
     address1_entry = ttk.Entry(window2, font=custom_font, textvariable=address1_var)
+
+    #radio
+    radio_button_a = ttk.Radiobutton(window2, text="Personal ", variable=customer_type_var, value="1", command=show_entries)
+    radio_button_b = ttk.Radiobutton(window2, text="Buiness ", variable=customer_type_var, value="2", command=show_entries)
 
     #grid
     paddingy = 3
@@ -663,14 +696,9 @@ if __name__ == "__main__":
     email_entry.grid(row=1, column=1, sticky="ew")
     label_pass.grid(row=2, column=0, padx=paddingx, pady=paddingy)
     pass_entry.grid(row=2, column=1, sticky="ew")
-    label_lname.grid(row=3, column=0, padx=paddingx, pady=paddingy)
-    lname_entry.grid(row=3, column=1, sticky="ew")
-    label_fname.grid(row=4, column=0, padx=paddingx,pady=paddingy)
-    fname_entry.grid(row=4, column=1, sticky="ew")
-    label_lname_kana.grid(row=5, column=0, padx=paddingx, pady=paddingy)
-    lname_kana_entry.grid(row=5, column=1, sticky="ew")
-    label_fname_kana.grid(row=6, column=0, padx=paddingx, pady=paddingy)
-    fname_kana_entry.grid(row=6, column=1, sticky="ew")
+    radio_button_a.grid(row=3, column=0, padx=paddingx, pady=paddingy)
+    radio_button_b.grid(row=3, column=1, padx=paddingx, pady=paddingy)
+    show_entries()
 
     label_zipcode.grid(row=1, column=2, padx=paddingx, pady=paddingy)
     zipcode_entry.grid(row=1, column=3, sticky="ew")
@@ -693,9 +721,26 @@ if __name__ == "__main__":
     date_card_combobox_month.grid(row=3, column=7, sticky="ew",padx=1)
     label_cvc.grid(row=4, column=5, padx=paddingx, pady=paddingy)
     cvc_entry.grid(row=4, column=6, sticky="ew")
-    button.grid(row=5, column=2, sticky="ew", rowspan=2, padx=paddingx, pady=paddingy)
+    button.grid(row=6, column=2, sticky="ew", rowspan=2, padx=paddingx, pady=paddingy)
 
-    #progress bar
-    progress_bar.grid(row=0, column=0, sticky="ew", padx=paddingx, pady=paddingy, columnspan=3)
+    history_data = get_input.get_history_file()
+    progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate")
+    progress_bar.bind("<Configure>", lambda e: progress_bar.configure(length=window2.winfo_width()))
+    all_history_data = list(history_data.keys())
+    all_history_data.insert(0,'')
+    combobox_date = ttk.Combobox(window3, width=10, values=all_history_data, font=custom_font)
+    combobox_date.set(datetime.now().strftime("%Y-%m-%d"))
+    combobox_date.bind("<<ComboboxSelected>>", lambda e: display_scroll_text(history_data,combobox_date.get()))
+    text_widget_output = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font, width=37)
+    text_widget_history = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font)
+
+    # Hiển thị dữ liệu trong ScrolledText 
+    display_scroll_text(history_data=history_data,is_specific_date=datetime.now().strftime("%Y/%m/%d"))
+
+    progress_bar.grid(row=0, column=0, sticky="w", padx=paddingx, pady=paddingy,columnspan=3)
+    text_widget_output.grid(row=2, column=0, sticky="w", padx=paddingx, pady=paddingy)
+    combobox_date.grid(row=1, column=1, sticky="w", padx=paddingx, pady=paddingy)
+    text_widget_history.grid(row=2, column=1, sticky="w", padx=paddingx, pady=paddingy, columnspan=2)
+    text_widget_history.configure(state='disabled')
     is_running = [False]
     tk_object.mainloop()

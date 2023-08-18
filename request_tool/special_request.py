@@ -13,7 +13,7 @@ import asyncio
 import time
 from datetime import datetime
 import os
-from py_mini_racer import py_mini_racer
+from pynput import keyboard
 
 def format_html(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -119,7 +119,6 @@ def format_html(html):
 #     except Exception as e:
 #         await brower.close()
 #         return False
-    
 
 async def regis_by_browser(env):
     try:

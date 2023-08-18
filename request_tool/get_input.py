@@ -38,6 +38,10 @@ input_default = {
     'prefecture_id_text': '東京都',
     'address_1': '渋谷区以下に掲載がない場合454',
 #---------------YOU CAN CHANGE IF YOU SURE DATA IS VALID IN SERVER----------------
+    'company_name': 'lampart',
+    'company_name_kana': 'フリガナ',
+    'charge_name': 'chi',
+    'charge_name_kana': 'フリガナ',
 }
 
 file_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","config_input.json")
@@ -155,6 +159,7 @@ def generate_history_file(data):
             'password': data['password'],
             'excution_time': data['excution_time'],
             'time': time,
+            'env': data['env'],
         }
         history_data_file = {}
         history_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","history.json")
@@ -175,9 +180,17 @@ def generate_history_file(data):
         print(e)
         return False
 
-def main():
-    generate_history_file('')
+def get_history_file():
+    history_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","history.json")
+    if os.path.exists(history_path):
+        with open(history_path, 'r', encoding='utf-8') as file:
+            if file:
+                history_data_file = json.load(file)
+                return history_data_file
+    return False
+# def main():
+#     generate_history_file('')
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
