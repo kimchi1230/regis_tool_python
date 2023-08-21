@@ -213,6 +213,7 @@ async def get_gmo_token(env,tshop):
     brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,args=['--ignore-certificate-errors'])   
     page = await brower.newPage()
     await page.goto(html_file_path)
+    await asyncio.sleep(1)
     script = f""" 
                  Multipayment.init("{tshop}");
                  Multipayment.getToken({{

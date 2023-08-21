@@ -110,14 +110,12 @@ def regis():
             'csrf_test_name':csrf_key
         }
         x=session.post(url_step1,data=data_step1,cookies=cookie_step1,headers=headers,verify=False)
-        progress_bar["value"] = 20
-        progress_bar.update()
-
         soup = BeautifulSoup(x.text,features="lxml")
         mail_token_input = soup.find_all('input', {'name': 'token'})
         if mail_token_input:
             mail_token_values = [input_tag['value'] for input_tag in mail_token_input]
             tmp.append(mail_token_values[0])
+            update_output(progressbar_percent=20,progressbar_value='STEP 1/5: GET TOKEN MAIL DONE\n')
 #-----------------------------------------------------------------------------------------
 #---------------------------------SEND REQUEST 1------------------------------------------     
 
@@ -129,8 +127,6 @@ def regis():
 
         # get variable server
         n = session.post(url_step3,data=data_step3,verify=False)
-        progress_bar["value"] = 40
-        progress_bar.update()
 
         soup_server = BeautifulSoup(n.text,features="lxml")
         server_inputs = soup_server.find_all('input', {'name': 'server'})
@@ -165,6 +161,8 @@ def regis():
         if campaign_page_code:
             campaign_page_code_values = [input_tag['value'] for input_tag in campaign_page_code]
             ser_campaign_page_code = check_exits_value(campaign_page_code_values,0,'campaign_page_code')
+        
+        update_output(progressbar_percent=40,progressbar_value='STEP 2/5: GET VARIABLE SERVER DONE\n')
 
 #-----------------------------------------------------------------------------------------
 #---------------------------------SEND REQUEST 2------------------------------------------  
@@ -202,8 +200,6 @@ def regis():
         }
         # send request to get variable agree
         request_agree = session.post(url_agree,data=data_agree,verify=False)
-        progress_bar["value"] = 60
-        progress_bar.update()
 
         soup_agree = BeautifulSoup(request_agree.text,features="lxml")
         agree_inputs = soup_agree.find_all('input', {'name': 'agree'})
@@ -218,6 +214,7 @@ def regis():
         if shop:
             shop_values = [input_tag['value'] for input_tag in shop]
             tshop = check_exits_value(shop_values,0,'tshop')
+        update_output(progressbar_percent=60,progressbar_value='STEP 3/5: GET VARIABLE AGREE DONE\n') 
 #-----------------------------------------------------------------------------------------
 #---------------------------------SEND REQUEST 3------------------------------------------  
 
@@ -289,6 +286,10 @@ def regis():
         token = asyncio.run(special_request.get_gmo_token(env,tshop))
         if token['status'] == '551':
             raise Exception("FINAL REQUEST FAIL")
+        if not token['token']:
+            raise Exception("GET TOKEN FAIL, TOKEN EMPTY")
+        update_output(progressbar_percent=80,progressbar_value='STEP 4/5: GET GMO TOKEN DONE\n')
+
         data_final = {
             'token_mail_confirm': tmp[0], 
             'ser_server': ser_server,
@@ -367,8 +368,6 @@ def regis():
             print(password_p)
             # set label_password text
             end = time.time()
-            progress_bar["value"] = 100
-            progress_bar.update()
             result_save = {
                 'email':email,
                 'password':password_p,
@@ -379,15 +378,13 @@ def regis():
             get_input.generate_history_file(result_save)
             text_widget_history.configure(state='normal')
             text_widget_history.insert("1.0",''.join((f"{key}: {value}\n" for key,value in result_save.items()))+"==================================================\n")
+            update_output(progressbar_percent=100,progressbar_value='STEP 5/5: REGISTER CONTRACT DONE\nALL FEATURE SUCCESS\n==========================================\n')
         else:
             raise Exception("FINAL REQUEST PROCESS FAIL")
     except Exception as e:
-        # update_text("ALO lỗi rồi đại vương ơi !")
         print(e)
-        text_widget_history.configure(state='normal')
-        text_widget_history.insert("1.0",e+"==================================================\n")
+        update_output(progressbar_percent=0,progressbar_value=str(e)+"\n==========================================\n")
     session.close()
-    print(excution_time)
     button.config(state="normal")
     text_widget_history.configure(state='disable')
     is_running[0] = False   
@@ -449,12 +446,6 @@ def on_button_click():
         if mode == 'fast':
             threading.Thread(target=regis).start()
             return
-
-#---------COPY TO CLIPBOARD-----------------
-def copy_to_clipboard(text_widget):
-    text = text_widget.get("1.0", "end-1c")
-    window2.clipboard_clear()
-    window2.clipboard_append(text)
 
 #---------CHECK VALUE EXIST-----------------
 def check_exits_value(data,key,str):
@@ -558,12 +549,24 @@ def display_scroll_text(history_data,is_specific_date=False):
                 text_widget_history.insert("end",''.join((f"{key}: {value +' '+date if key == 'time' else value}\n" for key,value in history.items()))+"==================================================\n")
         text_widget_history.configure(state='disable')
 
+def update_output(progressbar_percent,progressbar_value):
+    progress_bar["value"] = progressbar_percent
+    progress_bar.update()
+    text_widget_output.configure(state='normal')
+    text_widget_output.insert("end",progressbar_value)
+    text_widget_output.configure(state='disable')
+
+def clear_output():
+    text_widget_output.configure(state='normal')
+    text_widget_output.delete("1.0",tk.END)
+    text_widget_output.configure(state='disable')
+
 tk_object = tk.Tk()
 if __name__ == "__main__":
     asynco = asyncio.new_event_loop()
     tk_object.title("THE REGISTOR")
     # tk_object.geometry("750x350+100+100")
-    tk_object.resizable(1,1)
+    tk_object.resizable(0,0)
     tk_object.bind_all("<Button-1>", lambda event: event.widget.focus_set() if isinstance(event.widget, tk.Widget) else None)
     custom_font = Font(family="Comic Sans MS", size=10)
 
@@ -639,6 +642,7 @@ if __name__ == "__main__":
 
     #button
     button = tk.Button(window2, text="Submit",width=0, height=2, font=custom_font,bd=2, highlightthickness=2, highlightbackground="red",command=on_button_click)
+    button_clear_output = tk.Button(window3, text="Clear Output", font=custom_font,bd=2, highlightthickness=2, highlightbackground="red",command=clear_output)
 
      #label
     label = tk.Label(window2, text="Environment :",font=custom_font)
@@ -683,6 +687,21 @@ if __name__ == "__main__":
     radio_button_a = ttk.Radiobutton(window2, text="Personal ", variable=customer_type_var, value="1", command=show_entries)
     radio_button_b = ttk.Radiobutton(window2, text="Buiness ", variable=customer_type_var, value="2", command=show_entries)
 
+    history_data = get_input.get_history_file()
+    progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate")
+    progress_bar.bind("<Configure>", lambda e: progress_bar.configure(length=window2.winfo_width()))
+
+    all_history_data = list(history_data.keys())
+    all_history_data.insert(0,'')
+    combobox_date = ttk.Combobox(window3, width=10, values=all_history_data, font=custom_font)
+    combobox_date.set(datetime.now().strftime("%Y-%m-%d"))
+    combobox_date.bind("<<ComboboxSelected>>", lambda e: display_scroll_text(history_data,combobox_date.get()))
+
+    text_widget_output = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font, width=37)
+    text_widget_history = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font)
+    # Hiển thị dữ liệu trong ScrolledText 
+    display_scroll_text(history_data=history_data,is_specific_date=datetime.now().strftime("%Y/%m/%d"))
+
     #grid
     paddingy = 3
     paddingx = 8
@@ -723,24 +742,12 @@ if __name__ == "__main__":
     cvc_entry.grid(row=4, column=6, sticky="ew")
     button.grid(row=6, column=2, sticky="ew", rowspan=2, padx=paddingx, pady=paddingy)
 
-    history_data = get_input.get_history_file()
-    progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate")
-    progress_bar.bind("<Configure>", lambda e: progress_bar.configure(length=window2.winfo_width()))
-    all_history_data = list(history_data.keys())
-    all_history_data.insert(0,'')
-    combobox_date = ttk.Combobox(window3, width=10, values=all_history_data, font=custom_font)
-    combobox_date.set(datetime.now().strftime("%Y-%m-%d"))
-    combobox_date.bind("<<ComboboxSelected>>", lambda e: display_scroll_text(history_data,combobox_date.get()))
-    text_widget_output = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font, width=37)
-    text_widget_history = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font)
-
-    # Hiển thị dữ liệu trong ScrolledText 
-    display_scroll_text(history_data=history_data,is_specific_date=datetime.now().strftime("%Y/%m/%d"))
-
     progress_bar.grid(row=0, column=0, sticky="w", padx=paddingx, pady=paddingy,columnspan=3)
     text_widget_output.grid(row=2, column=0, sticky="w", padx=paddingx, pady=paddingy)
     combobox_date.grid(row=1, column=1, sticky="w", padx=paddingx, pady=paddingy)
+    button_clear_output.grid(row=1, column=0, sticky="w", padx=paddingx, pady=paddingy)
     text_widget_history.grid(row=2, column=1, sticky="w", padx=paddingx, pady=paddingy, columnspan=2)
     text_widget_history.configure(state='disabled')
+    text_widget_output.configure(state='disabled')
     is_running = [False]
     tk_object.mainloop()
