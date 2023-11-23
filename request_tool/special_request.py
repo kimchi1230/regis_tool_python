@@ -13,7 +13,8 @@ import asyncio
 import time
 from datetime import datetime
 import os
-from pynput import keyboard
+from urllib.parse import unquote
+# from post1 import update_output
 
 def format_html(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -120,26 +121,57 @@ def format_html(html):
 #         await brower.close()
 #         return False
 
-async def regis_by_browser(env):
+def update_output(widget,progressbar_percent,progressbar_text):
+    widget['progress_bar']["value"] = progressbar_percent
+    widget['progress_bar'].update()
+    widget['text_widget_output'].configure(state='normal')
+    widget['text_widget_output'].insert("end",progressbar_text)
+    widget['text_widget_output'].configure(state='disable')
+
+def save_data_from_browser(request):
+    if url_root_module in request.url:
+        print("URL:", request.url)
+        print("Method:", request.method)
+        print("Headers:", request.headers)
+        print("PostData:", request.postData)
+        post = request.postData
+        if post:
+            post = unquote(post)
+            data_pilt = post.split('&')
+            input_value = {}
+            for pair in data_pilt:
+                key, value = pair.split('=')
+                input_value[key] = value
+
+
+
+async def regis_by_browser(env,widget=None):
     try:
+    
         start = time.time()
         input = get_input.get_config()
+        have_widget = bool(widget)
         switcher = {
             'local':'https://dev.beer.com.vn',
             'dev':'https://dev1.drbe.jp',
             'debug1':'https://debug1.drbe.jp',
-            'beer1':'https://beer1-lampart.com.vn'
+            'beer1':'https://beer1-lampart.com.vn',
+            'beer':'https://beer-lampart.com.vn',
         }
         url_root = switcher.get(env,'invalid')
+        global url_root_module
+        url_root_module = url_root + '/register/success/code/registration'
         url = url_root + '/register/server/entrymailaddress'
         email = input['email']+ datetime.now().strftime('%y%m%d%H%M%S')+ '@lampart-vn.com'
         headless = False
-        brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True)
+        brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,defaultViewport=None)
         page = await brower.newPage()
+        page.on('request', save_data_from_browser)
         await page.goto(url)
         await page.type('#txt_confirm_zipcode',input['zipcode'])
         await page.waitForSelector('#btn-ajax-zipcode')
         await page.click('#btn-ajax-zipcode')
+        await asyncio.sleep(1)
         await page.waitForSelector('#txt_entrymailaddress')
         await asyncio.sleep(2)
         await page.type('#txt_entrymailaddress',email)
@@ -147,11 +179,15 @@ async def regis_by_browser(env):
         await page.click('input[name="year_old"]')
         await page.click('input[name="agreement"]')
         await page.click('#email_register_address')
+        if have_widget:
+            update_output(widget=widget,progressbar_percent=20,progressbar_text='STEP 1/4: DONE\n')
         
         await page.waitForNavigation()
         await page.waitForSelector('#option_service')
         await page.click('#personal_credit_gmo')
         await page.click('#btn_next_step')
+        if have_widget:
+            update_output(widget=widget,progressbar_percent=40,progressbar_text='STEP 2/4: DONE\n')
 
         await page.waitForNavigation()
         await page.waitForSelector('#c_last_name')
@@ -177,14 +213,18 @@ async def regis_by_browser(env):
         await page.type('#payment_card_cvc',input['payment_card_cvc'])
         await page.click('input[name="agree"][type="checkbox"]')
         await page.click('.btn_next_step')
+        if have_widget:
+            update_output(widget=widget,progressbar_percent=60,progressbar_text='STEP 3/4: DONE\n')
 
         await page.waitForNavigation()
         await page.waitForSelector('.btn_next_step')
         await asyncio.sleep(1)
         await page.click('.btn_next_step')
-        await page.waitForSelector('.redirect-url')
+        await page.waitForSelector(selector='.redirect-url',timeout=0)
         end = time.time()
         await brower.close()
+        if have_widget:
+            update_output(widget=widget,progressbar_percent=100,progressbar_text='STEP 4/4: DONE\n==========================================\n')
         return {
             'email':email,
             'password':input['password'],
@@ -192,6 +232,7 @@ async def regis_by_browser(env):
         }
     except Exception as e:
         await brower.close()
+        print(e)
         return False
         
 
@@ -201,7 +242,8 @@ async def get_gmo_token(env,tshop):
         'local':'https://dev.beer.com.vn',
         'dev':'https://dev1.drbe.jp',
         'debug1':'https://debug1.drbe.jp',
-        'beer1':'https://beer1-lampart.com.vn'
+        'beer1':'https://beer1-lampart.com.vn',
+        'beer':'https://beer-lampart.com.vn',
     }
     url_root = switcher.get(env,'invalid')
     card = input['payment_card_no_1']+input['payment_card_no_2']+input['payment_card_no_3']+input['payment_card_no_4']
@@ -240,7 +282,5 @@ async def get_gmo_token(env,tshop):
         'token':token,
     }
 
-# if __name__ == "__main__":
-#     get_gmo_token_js()
-
-    # perform_post_request_with_button_click(url, post_data)
+if __name__ == "__main__":
+    asyncio.run(regis_by_browser('local'))

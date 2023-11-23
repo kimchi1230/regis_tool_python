@@ -17,7 +17,6 @@ from tkinter.scrolledtext import ScrolledText
 
 def regis():
     try:
-        is_running[0] = True
         button.config(state="disabled")
         start = time.time()
         env = combobox_var.get().lower()
@@ -26,7 +25,7 @@ def regis():
             'dev':'https://dev1.drbe.jp',
             'debug1':'https://debug1.drbe.jp',
             'beer1':'https://beer1-lampart.com.vn',
-            'sql_agree':'agree',
+            'beer':'https://beer-lampart.com.vn',
         }
         url_root = switcher.get(env,'invalid')
             
@@ -387,14 +386,17 @@ def regis():
     session.close()
     button.config(state="normal")
     text_widget_history.configure(state='disable')
-    is_running[0] = False   
 
 
 #---------CALL FUNCTION REGIS BY BROWER-----------------
 def do_regis_by_brower():
     env = combobox_var.get().lower()
     button.config(state="disabled")
-    result_brower = asyncio.run(special_request.regis_by_browser(env))
+    widget = {
+        'progress_bar':progress_bar,
+        'text_widget_output':text_widget_output,
+    }
+    result_brower = asyncio.run(special_request.regis_by_browser(env,widget))
     if result_brower:
         result_data = {
             'email':result_brower['email'],
@@ -409,43 +411,42 @@ def do_regis_by_brower():
 
 #---------ONCLICK TRIGGER FUNCTION-----------------
 def on_button_click():
-    if not is_running[0]:
-        input_display = {
-            'email': email_var.get(),
-            'password' : pass_var.get(),
-            'first_name': fname_var.get(),
-            'last_name': lname_var.get(),
-            'first_name_kana': fname_kana_var.get(),
-            'last_name_kana': lname_kana_var.get(),
-            'payment_card_no_1': card_var_1.get(),
-            'payment_card_no_2': card_var_2.get(),
-            'payment_card_no_3': card_var_3.get(),
-            'payment_card_no_4': card_var_4.get(),
-            'payment_expiry_year': year_card_var.get(),
-            'payment_expiry_month': month_card_var.get(),
-            'payment_card_name': card_name_var.get(),
-            'payment_card_cvc': cvc_var.get(),
-            'zipcode': zipcode_var.get(),
-            'prefecture': prefecture_id_var.get(),
-            'prefecture_id_text': prefecture_var.get(),
-            'address_1': address1_var.get(),
-            'customer_type': customer_type_var.get(),
-            'company_name': company_name_var.get(),
-            'company_name_kana': company_name_kana_var.get(),
-            'charge_name': charge_name_var.get(),
-            'charge_name_kana': charge_name_kana_var.get(),
-        }
-        is_write_complete = get_input.set_config(input_display)
-        if not is_write_complete:
-            messagebox.showerror('Error','Cannot write file config')
-            return
-        mode = mode_var.get()
-        if mode == 'manual':
-            threading.Thread(target=do_regis_by_brower).start()
-            return
-        if mode == 'fast':
-            threading.Thread(target=regis).start()
-            return
+    input_display = {
+        'email': email_var.get(),
+        'password' : pass_var.get(),
+        'first_name': fname_var.get(),
+        'last_name': lname_var.get(),
+        'first_name_kana': fname_kana_var.get(),
+        'last_name_kana': lname_kana_var.get(),
+        'payment_card_no_1': card_var_1.get(),
+        'payment_card_no_2': card_var_2.get(),
+        'payment_card_no_3': card_var_3.get(),
+        'payment_card_no_4': card_var_4.get(),
+        'payment_expiry_year': year_card_var.get(),
+        'payment_expiry_month': month_card_var.get(),
+        'payment_card_name': card_name_var.get(),
+        'payment_card_cvc': cvc_var.get(),
+        'zipcode': zipcode_var.get(),
+        'prefecture': prefecture_id_var.get(),
+        'prefecture_id_text': prefecture_var.get(),
+        'address_1': address1_var.get(),
+        'customer_type': customer_type_var.get(),
+        'company_name': company_name_var.get(),
+        'company_name_kana': company_name_kana_var.get(),
+        'charge_name': charge_name_var.get(),
+        'charge_name_kana': charge_name_kana_var.get(),
+    }
+    is_write_complete = get_input.set_config(input_display)
+    if not is_write_complete:
+        messagebox.showerror('Error','Cannot write file config')
+        return
+    mode = mode_var.get()
+    if mode == 'manual':
+        threading.Thread(target=do_regis_by_brower).start()
+        return
+    if mode == 'fast':
+        threading.Thread(target=regis).start()
+        return
 
 #---------CHECK VALUE EXIST-----------------
 def check_exits_value(data,key,str):
@@ -461,6 +462,7 @@ def get_zipcode_info():
             'dev':'https://dev1.drbe.jp',
             'debug1':'https://debug1.drbe.jp',
             'beer1':'https://beer1-lampart.com.vn',
+            'beer':'https://beer-lampart.com.vn',
             'sql_agree':'agree',
         }
     url_root = switcher.get(env,'invalid')
@@ -626,7 +628,7 @@ if __name__ == "__main__":
 
 
     #dropdown
-    values = ['local', 'dev', 'debug1','beer1']
+    values = ['local', 'dev', 'debug1','beer1','beer']
     combobox = ttk.Combobox(window2, values=values, width=22, state="readonly", textvariable=combobox_var)
     combobox.configure(font=custom_font)
     current_year = datetime.now().year
@@ -688,17 +690,20 @@ if __name__ == "__main__":
     radio_button_b = ttk.Radiobutton(window2, text="Buiness ", variable=customer_type_var, value="2", command=show_entries)
 
     history_data = get_input.get_history_file()
+    if history_data:
+        all_history_data = list(history_data.keys())
+    else:
+        all_history_data = []
     progress_bar = ttk.Progressbar(window3, orient="horizontal", mode="determinate")
     progress_bar.bind("<Configure>", lambda e: progress_bar.configure(length=window2.winfo_width()))
 
-    all_history_data = list(history_data.keys())
     all_history_data.insert(0,'')
-    combobox_date = ttk.Combobox(window3, width=10, values=all_history_data, font=custom_font)
+    combobox_date = ttk.Combobox(window3, width=10, values=all_history_data, font=custom_font, state="readonly")
     combobox_date.set(datetime.now().strftime("%Y-%m-%d"))
     combobox_date.bind("<<ComboboxSelected>>", lambda e: display_scroll_text(history_data,combobox_date.get()))
 
-    text_widget_output = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font, width=37)
-    text_widget_history = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font)
+    text_widget_output = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font, width=37, state='disabled')
+    text_widget_history = ScrolledText(window3, wrap=tk.WORD,height=21, font=custom_font, state='disabled')
     # Hiển thị dữ liệu trong ScrolledText 
     display_scroll_text(history_data=history_data,is_specific_date=datetime.now().strftime("%Y/%m/%d"))
 
@@ -747,7 +752,4 @@ if __name__ == "__main__":
     combobox_date.grid(row=1, column=1, sticky="w", padx=paddingx, pady=paddingy)
     button_clear_output.grid(row=1, column=0, sticky="w", padx=paddingx, pady=paddingy)
     text_widget_history.grid(row=2, column=1, sticky="w", padx=paddingx, pady=paddingy, columnspan=2)
-    text_widget_history.configure(state='disabled')
-    text_widget_output.configure(state='disabled')
-    is_running = [False]
     tk_object.mainloop()

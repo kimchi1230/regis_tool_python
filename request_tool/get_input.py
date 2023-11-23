@@ -187,7 +187,7 @@ def get_history_file():
             if file:
                 history_data_file = json.load(file)
                 return history_data_file
-    return False
+    return {}
 # def main():
 #     generate_history_file('')
 
