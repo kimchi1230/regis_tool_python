@@ -147,7 +147,7 @@ def save_data_from_browser(request):
 
 async def regis_by_browser(env,widget=None):
     try:
-    
+        path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","local-chromium","588429","chrome-win32","chrome.exe")
         start = time.time()
         input = get_input.get_config()
         have_widget = bool(widget)
@@ -164,7 +164,7 @@ async def regis_by_browser(env,widget=None):
         url = url_root + '/register/server/entrymailaddress'
         email = input['email']+ datetime.now().strftime('%y%m%d%H%M%S')+ '@lampart-vn.com'
         headless = False
-        brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,defaultViewport=None)
+        brower = await launch(executablePath=path,headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,defaultViewport=None)
         page = await brower.newPage()
         page.on('request', save_data_from_browser)
         await page.goto(url)
@@ -237,6 +237,7 @@ async def regis_by_browser(env,widget=None):
         
 
 async def get_gmo_token(env,tshop):
+    path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","local-chromium","588429","chrome-win32","chrome.exe")
     input = get_input.get_config()
     switcher = {
         'local':'https://dev.beer.com.vn',
@@ -252,7 +253,7 @@ async def get_gmo_token(env,tshop):
     headless = False
     if input.get('is_disable_brower') == '1':
         headless = True
-    brower = await launch(headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,args=['--ignore-certificate-errors'])   
+    brower = await launch(executablePath=path,headless=headless,handleSIGINT=False,handleSIGTERM=False,handleSIGHUP=False,ignoreHTTPSErrors=True,args=['--ignore-certificate-errors'])   
     page = await brower.newPage()
     await page.goto(html_file_path)
     await asyncio.sleep(1)
