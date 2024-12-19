@@ -42,6 +42,14 @@ input_default = {
     'company_name_kana': 'フリガナ',
     'charge_name': 'chi',
     'charge_name_kana': 'フリガナ',
+    'chose_number_person':'2',
+    'env': {
+        'local':'https://dev.beer.com.vn',
+        'dev':'https://dev1.drbe.jp',
+        'debug1':'https://debug1.drbe.jp',
+        'beer1':'https://beer1-lampart.com.vn',
+        'beer':'https://beer-lampart.com.vn',
+    }
 }
 
 file_path = os.path.join(os.path.expanduser("~"), "Documents","regis_tool","config_input.json")
@@ -72,7 +80,8 @@ def get_content_write_file(content):
     input = get_config()
     is_change = False
     for key, value in content.items():
-        if input.get(key) and input[key] != value:
+        if not value: raise Exception('input blank')
+        if input[key] != value:
             input[key] = value
             is_change = True
     if is_change:
@@ -157,6 +166,7 @@ def generate_history_file(data):
         history_data = {
             'email': data['email'],
             'password': data['password'],
+            'contract_id':data['contract_id'],
             'excution_time': data['excution_time'],
             'time': time,
             'env': data['env'],
