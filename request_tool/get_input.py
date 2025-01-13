@@ -17,7 +17,7 @@ input_default = {
     'address_2': '',
     'is_disable_brower': '1',
 #---------------DO NOT CHANGE BELOW INPUT-----------------
-    'server_rental': '2',
+    'server_rental': '1',
     'water': '211',
     'holder_color': '3',
     'customer_type': '1',
@@ -115,6 +115,7 @@ def generate_html_file(content):
             <div id="url"></div>
             <div id="resultCode"></div>
             <div id="token"></div>
+            <div id="token_search"></div>
             <script>
                 const urlParams = new URLSearchParams(window.location.search);
                 let env = urlParams.get('env');

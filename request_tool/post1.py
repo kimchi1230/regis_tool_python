@@ -423,6 +423,7 @@ class tkinter_layout:
                 'result_code_gmo_token':token['status'],
                 'con_choose_number_person':chose_number_person,
                 'gmo_token':token['token'],
+                'gmo_token_search_card_detail': token['token_search'],
             }
             if customer_type == '2':
                 del data_final['con_c_first_name']

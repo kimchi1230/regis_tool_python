@@ -271,23 +271,26 @@ async def get_gmo_token(env,tshop):
                         expire       : "{expire}",
                         securitycode : "{input['payment_card_cvc']}",
                         holdername   : "{input['payment_card_name']}",
-                        tokennumber  : 1
+                        tokennumber  : 2
                  }}, function(response){{
                     console.log(response.resultCode);
                     console.log(response.tokenObject.token[0]);
                     document.getElementById("resultCode").innerHTML = response.resultCode;
                     document.getElementById("token").innerHTML = response.tokenObject.token[0];
+                    document.getElementById("token_search").innerHTML = response.tokenObject.token[1];
                  }});"""
     await page.evaluate(script)
     await asyncio.sleep(1)
     html = await page.content()
     soup_token = BeautifulSoup(html, 'html.parser')
     token = soup_token.find(id='token').text
+    token_search = soup_token.find(id='token_search').text
     result = soup_token.find(id='resultCode').text
     await brower.close()
     return {
         'status':result,
         'token':token,
+        'token_search':token_search
     }
 
 
