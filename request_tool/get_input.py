@@ -116,6 +116,7 @@ def generate_html_file(content):
             <div id="resultCode"></div>
             <div id="token"></div>
             <div id="token_search"></div>
+            <div id="token_3ds2"></div>
             <script>
                 const urlParams = new URLSearchParams(window.location.search);
                 let env = urlParams.get('env');
